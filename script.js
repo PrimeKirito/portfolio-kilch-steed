@@ -62,7 +62,7 @@ const galleryImages = {
     { src: "assets/sacerdoce-royal02.png", alt: "Sacerdoce Royal — présentation de l’identité visuelle, visuel 2" },
     { src: "assets/sacerdoce-royal03.png", alt: "Sacerdoce Royal — présentation de l’identité visuelle, visuel 3" },
     { src: "assets/sacerdoce-royal04.png", alt: "Sacerdoce Royal — présentation de l’identité visuelle, visuel 4" },
-    { src: "assets/Sacerdoce%20royal_Charte%20Graphique_Final-10.png", alt: "Sacerdoce Royal — extrait complémentaire de la charte graphique" }
+    { src: "assets/Sacerdoce%20royal_Charte%20Graphique_Final-10.png", alt: "Sacerdoce Royal — extrait complémentaire de la charte graphique, visuel 5" }
   ],
   magik: [
     { src: "assets/magik-optik01.png", alt: "Magik Opti’k — identité de marque, visuel 1" },
@@ -98,36 +98,59 @@ document.querySelectorAll("[data-gallery]").forEach((gallery) => {
   if (!images || images.length < 2 || !imageElement || !counter || !previousButton || !nextButton) return;
 
   let currentIndex = 0;
+  let isLoading = false;
+  let touchStartX = null;
 
-  const showImage = (requestedIndex) => {
-    currentIndex = (requestedIndex + images.length) % images.length;
-    const selectedImage = images[currentIndex];
-    imageElement.classList.add("is-changing");
-    imageElement.src = selectedImage.src;
-    imageElement.alt = selectedImage.alt;
-    counter.textContent = String(currentIndex + 1) + " / " + String(images.length);
-    imageElement.addEventListener("load", () => {
-      imageElement.classList.remove("is-changing");
-    }, { once: true });
-    imageElement.addEventListener("error", () => {
-      imageElement.classList.remove("is-changing");
+  const showImage = (requestedIndex, direction = 1) => {
+    if (isLoading) return;
+    const nextIndex = (requestedIndex + images.length) % images.length;
+    if (nextIndex === currentIndex) return;
+
+    isLoading = true;
+    const selectedImage = images[nextIndex];
+    const preload = new Image();
+
+    preload.onload = () => {
+      gallery.style.setProperty("--slide-offset", direction > 0 ? "1.1rem" : "-1.1rem");
+      imageElement.classList.add("is-changing");
+      imageElement.src = selectedImage.src;
+      imageElement.alt = selectedImage.alt;
+      currentIndex = nextIndex;
+      counter.textContent = String(currentIndex + 1) + " / " + String(images.length);
+
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          imageElement.classList.remove("is-changing");
+          isLoading = false;
+        });
+      });
+    };
+
+    preload.onerror = () => {
       counter.textContent = "Image indisponible";
-    }, { once: true });
+      isLoading = false;
+    };
+    preload.src = selectedImage.src;
   };
 
-  previousButton.addEventListener("click", () => showImage(currentIndex - 1));
-  nextButton.addEventListener("click", () => showImage(currentIndex + 1));
+  previousButton.addEventListener("click", () => showImage(currentIndex - 1, -1));
+  nextButton.addEventListener("click", () => showImage(currentIndex + 1, 1));
 
-  let touchStartX = null;
+  gallery.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") showImage(currentIndex - 1, -1);
+    if (event.key === "ArrowRight") showImage(currentIndex + 1, 1);
+  });
+
   gallery.addEventListener("touchstart", (event) => {
     touchStartX = event.changedTouches[0].clientX;
   }, { passive: true });
+
   gallery.addEventListener("touchend", (event) => {
     if (touchStartX === null) return;
     const distance = event.changedTouches[0].clientX - touchStartX;
     touchStartX = null;
     if (Math.abs(distance) < 45) return;
-    showImage(currentIndex + (distance < 0 ? 1 : -1));
+    showImage(currentIndex + (distance < 0 ? 1 : -1), distance < 0 ? 1 : -1);
   }, { passive: true });
 });
 
