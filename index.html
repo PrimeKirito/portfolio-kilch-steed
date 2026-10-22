@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f0e8">
+  <meta name="description" content="Portfolio de Kilch Steed EYEGHE : gestion de projet numérique, direction artistique, design et communication digitale.">
+  <title>Kilch Steed EYEGHE — Portfolio</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+  <header class="site-header">
+    <a class="wordmark" href="#accueil" aria-label="Kilch Steed EYEGHE, accueil">KSE<span>®</span></a>
+    <p class="header-note">Portfolio indépendant <span>·</span> 2026</p>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="navigation">Menu <span aria-hidden="true">＋</span></button>
+    <nav id="navigation" class="navigation" aria-label="Navigation principale">
+      <a href="#projets">Projets <span>01</span></a>
+      <a href="#profil">Profil <span>02</span></a>
+      <a href="#contact">Contact <span>03</span></a>
+    </nav>
+  </header>
+
+  <main id="contenu">
+    <section class="hero section-wrap" id="accueil" aria-labelledby="hero-title">
+      <div class="eyebrow"><span class="status-dot" aria-hidden="true"></span> CHEF DE PROJET NUMÉRIQUE · DESIGNER</div>
+      <div class="hero-grid">
+        <h1 id="hero-title">Je transforme<br>les idées en<br><span class="blue-word">projets</span> qui<br>prennent forme<span class="blue-word">.</span></h1>
+        <div class="hero-aside">
+          <div class="hero-mark" aria-hidden="true"><span>K</span><span>S</span><span>E</span><i></i></div>
+          <p>Stratégie, coordination et création. Je donne une direction aux idées et une forme aux projets numériques.</p>
+          <a class="text-link" href="#projets">Explorer les projets <span aria-hidden="true">↘</span></a>
+        </div>
+      </div>
+      <div class="hero-foot"><span>INDÉPENDANT DANS L'APPROCHE, COLLECTIF DANS L'ACTION.</span><span>FRANCE · DISPONIBLE POUR DE NOUVEAUX PROJETS</span></div>
+    </section>
+
+    <section class="intro section-wrap" id="profil">
+      <p class="section-kicker">01 / EN QUELQUES MOTS</p>
+      <div class="intro-copy"><h2>Un pied dans<br>la <span class="serif-italic">stratégie.</span><br>Un autre dans<br>la création.</h2>
+      <div class="intro-detail"><p>J’accompagne les projets de l’idée à la réalisation, en reliant vision stratégique, organisation et sens du design. Mon approche mêle compréhension des besoins, coordination des équipes et attention portée aux détails.</p><p>Du cadrage à la livraison, je cherche le point de rencontre entre ce qui est utile, ce qui est juste et ce qui marque les esprits.</p><a class="text-link" href="#contact">Parlons de votre projet <span aria-hidden="true">↗</span></a></div></div>
+      <div class="skills-row"><span>GESTION DE PROJET</span><span>STRATÉGIE DIGITALE</span><span>DIRECTION ARTISTIQUE</span><span>PRODUCTION AUDIOVISUELLE</span></div>
+    </section>
+
+    <section class="projects section-wrap" id="projets">
+      <div class="section-head"><div><p class="section-kicker">02 / SÉLECTION DE PROJETS</p><h2>Du sens.<br><span class="serif-italic">Du concret.</span></h2></div><p class="section-caption">Des projets pensés, construits et réalisés avec une attention égale à la démarche et au résultat.</p></div>
+      <div class="filter-bar" role="group" aria-label="Filtrer les projets"><button class="filter-button is-active" data-filter="all" aria-pressed="true">Tout voir <span>04</span></button><button class="filter-button" data-filter="design" aria-pressed="false">Design</button><button class="filter-button" data-filter="audiovisuel" aria-pressed="false">Audiovisuel</button><button class="filter-button" data-filter="strategie" aria-pressed="false">Stratégie numérique</button></div>
+      <div class="project-grid">
+        <article class="project-card project-card--wide" data-category="design strategie">
+          <button class="project-open" data-project="sacerdoce" aria-label="Découvrir le projet Sacerdoce Royale"><span class="project-image"><img src="assets/cover-sacerd.svg" alt="Composition graphique de présentation de l'identité Sacerdoce Royale" loading="lazy"><span class="image-index">01 / IDENTITÉ</span><span class="image-arrow" aria-hidden="true">↗</span></span><span class="project-meta"><span><strong>Sacerdoce Royale</strong><small>Identité visuelle · Direction artistique</small></span><span class="project-year">BRANDING</span></span></button>
+        </article>
+        <article class="project-card" data-category="audiovisuel strategie">
+          <button class="project-open" data-project="codev" aria-label="Découvrir le projet CODEV Métropole du Grand Paris"><span class="project-image"><img src="assets/cover-codev.svg" alt="Visuel conceptuel de production audiovisuelle pour CODEV" loading="lazy"><span class="image-index">02 / IMAGE</span><span class="image-arrow" aria-hidden="true">↗</span></span><span class="project-meta"><span><strong>CODEV Grand Paris</strong><small>Production audiovisuelle · Coordination</small></span><span class="project-year">VIDÉO</span></span></button>
+        </article>
+        <article class="project-card" data-category="design strategie">
+          <button class="project-open" data-project="plaine" aria-label="Découvrir le projet Plaine Commune"><span class="project-image"><img src="assets/cover-plaine.svg" alt="Composition éditoriale pour une publication de Plaine Commune" loading="lazy"><span class="image-index">03 / ÉDITION</span><span class="image-arrow" aria-hidden="true">↗</span></span><span class="project-meta"><span><strong>Plaine Commune</strong><small>Design éditorial · Mise en page</small></span><span class="project-year">ÉDITION</span></span></button>
+        </article>
+        <article class="project-card project-card--wide" data-category="strategie audiovisuel">
+          <button class="project-open" data-project="strategie" aria-label="Découvrir un projet de stratégie de communication"><span class="project-image"><img src="assets/cover-strategy.svg" alt="Composition graphique consacrée à la stratégie de communication numérique" loading="lazy"><span class="image-index">04 / STRATÉGIE</span><span class="image-arrow" aria-hidden="true">↗</span></span><span class="project-meta"><span><strong>Stratégie & contenus</strong><small>Communication digitale · Conception</small></span><span class="project-year">DIGITAL</span></span></button>
+        </article>
+      </div>
+      <p class="project-disclaimer">Cette sélection est une première base de présentation. Les visuels sont provisoires et les fiches projets restent à compléter et à valider avant diffusion.</p>
+    </section>
+
+    <section class="approach section-wrap"><p class="section-kicker">03 / MA FAÇON DE FAIRE</p><div class="approach-grid"><h2>Créer, c’est<br>faire des choix<span class="blue-word">.</span></h2><div class="approach-list"><div><span>01</span><p><strong>Comprendre</strong><small>Clarifier les besoins, les publics et les objectifs.</small></p><b aria-hidden="true">↘</b></div><div><span>02</span><p><strong>Structurer</strong><small>Donner un cadre, un rythme et une direction au projet.</small></p><b aria-hidden="true">↘</b></div><div><span>03</span><p><strong>Concevoir</strong><small>Transformer la vision en expériences et livrables concrets.</small></p><b aria-hidden="true">↘</b></div><div><span>04</span><p><strong>Faire aboutir</strong><small>Coordonner, ajuster et soigner la livraison finale.</small></p><b aria-hidden="true">↘</b></div></div></div></section>
+
+    <section class="contact section-wrap" id="contact"><p class="section-kicker">04 / ET MAINTENANT ?</p><div class="contact-grid"><h2>Une idée<br>à faire <span class="serif-italic">grandir</span> ?</h2><div class="contact-detail"><p>Je suis ouvert aux opportunités en gestion de projet numérique, communication digitale et design.</p><a class="contact-link" href="mailto:CONTACT_A_PERSONNALISER">Écrire un message <span aria-hidden="true">↗</span></a><p class="contact-note">Pense à remplacer l’adresse de contact avant publication.</p></div></div><div class="contact-bottom"><span>KILCH STEED EYEGHE</span><span>GESTION DE PROJET · DESIGN · NUMÉRIQUE</span><a href="#accueil">RETOUR EN HAUT ↑</a></div></section>
+  </main>
+
+  <footer class="site-footer"><span>© <span id="current-year">2026</span> KILCH STEED EYEGHE</span><span>CONÇU AVEC INTENTION. PUBLIÉ INDÉPENDAMMENT.</span><span>PORTFOLIO PERSONNEL</span></footer>
+
+  <dialog class="project-dialog" aria-labelledby="dialog-title"><form method="dialog"><button class="dialog-close" aria-label="Fermer la fiche projet">Fermer <span aria-hidden="true">×</span></button></form><p class="section-kicker" id="dialog-kicker">PROJET SÉLECTIONNÉ</p><h2 id="dialog-title">Projet</h2><p id="dialog-description"></p><div class="dialog-details"><div><span>CONTRIBUTION</span><p id="dialog-role"></p></div><div><span>À COMPLÉTER</span><p id="dialog-next"></p></div></div></dialog>
+</body>
+</html>
