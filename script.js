@@ -18,10 +18,10 @@ const projectContent = {
     next: "Document final, contraintes, méthode et captures autorisées."
   },
   strategie: {
-    title: "Stratégie & contenus numériques",
-    description: "Une sélection de travaux de stratégie de communication, de conception de contenus et d'organisation de production. Les exemples seront remplacés par un cas réel clairement contextualisé.",
-    role: "Cadrage, stratégie et conception de contenus selon le projet présenté.",
-    next: "Nom du projet, objectifs, public, livrables et résultats vérifiables."
+    title: "Guides & ateliers IA — Université Paris 8",
+    description: "Conception de guides et d’ateliers sur l’IA générative à destination des membres du service SCUIO-IP de l’Université Paris 8, dans le cadre du stage de fin d’études réalisé à l’agence 893°.",
+    role: "Conception de supports de formation et préparation d’ateliers.",
+    next: "Ajouter les visuels autorisés, préciser les objectifs pédagogiques et décrire les livrables réellement produits."
   }
 };
 
