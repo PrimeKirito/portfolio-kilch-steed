@@ -1,9 +1,9 @@
 const projectContent = {
   sacerdoce: {
     title: "Sacerdoce Royal — identité visuelle",
-    description: "Conception d’une charte graphique pour Sacerdoce Royal. Le document présente notamment le logotype, ses variantes, la palette chromatique, la typographie et des exemples d’application. L’aperçu public montre une seule application de l’identité.",
+    description: "Conception d’une charte graphique pour Sacerdoce Royal. Le document présente notamment le logotype, ses variantes, la palette chromatique, la typographie et des exemples d’application. La galerie présente six visuels sélectionnés de l’identité.",
     role: "Designer identifié sur la charte graphique : conception de l’identité visuelle et formalisation de ses règles d’usage.",
-    next: "L’aperçu ne donne pas accès à la charte complète. D’autres applications seront ajoutées au fil de la sélection."
+    next: "La galerie rassemble six visuels sélectionnés. La charte complète n’est pas publiée sur ce site."
   },
   magik: {
     title: "Magik Opti’k — charte graphique",
@@ -33,7 +33,25 @@ const projectContent = {
     title: "Lundi Pro — atelier sur l’IA",
     description: "Support de l’atelier « Mieux utiliser l’IA pour sa recherche de stage ou d’alternance », avec des objectifs pédagogiques, une méthode C.O.R.E. et des repères pour un usage réfléchi des outils. La présentation attribue l’animation à Kelch Steed EYEGHE et Narcisse N’OUEMOU.",
     role: "Co-animation et contribution à la conception du support avec Narcisse N’OUEMOU au sein de l’agence 893°.",
-    next: "Une diapositive sélectionnée est présentée ; le support complet n’est pas publié."
+    next: "Trois médias sélectionnés sont présentés ; le support complet n’est pas publié."
+  },
+  nano: {
+    title: "NaNo Ring — bague connectée multifonctionnelle",
+    description: "NaNo Ring est un projet de bague connectée multifonctionnelle qui réunit trois usages complémentaires : le paiement, le suivi santé et la gestion quotidienne. Les médias présentent une sélection du projet et de ses interfaces.",
+    role: "Chef de projet — pilotage du projet NaNo Ring et mise en cohérence des usages présentés autour du paiement, du suivi santé et de l’organisation quotidienne.",
+    next: "Cette galerie rassemble sept médias nommés NaNo App. Elle présente un aperçu du projet, sans constituer une validation médicale ni une promesse de performance."
+  },
+  agency: {
+    title: "893° — créations et communication d’agence",
+    description: "Une sélection de médias dédiés à 893°, l’agence de communication et d’innovation numérique. Cette galerie distingue les supports liés à la vie et à la communication de l’agence des projets réalisés pour ses clients.",
+    role: "Contribution au développement, à la coordination et à la communication de l’agence 893°.",
+    next: "Quatre médias de l’agence sont présentés dans cette sélection."
+  },
+  autres: {
+    title: "Autres créations — sélection complémentaire",
+    description: "Une galerie complémentaire destinée à présenter d’autres créations graphiques et explorations visuelles qui ne relèvent pas des projets détaillés dans les autres fiches.",
+    role: "Sélection de créations complémentaires.",
+    next: "Trois visuels sont présentés dans cette galerie. Les médias sont montrés comme une sélection et non comme un projet client unique."
   }
 };
 
@@ -57,16 +75,19 @@ filterButtons.forEach((button) => {
 
 
 const galleryImages = {
-  sacerdoce: [
-    { src: "assets/sacerdoce-royal01.png", alt: "Sacerdoce Royal — présentation de l’identité visuelle, visuel 1" },
-    { src: "assets/sacerdoce-royal02.png", alt: "Sacerdoce Royal — présentation de l’identité visuelle, visuel 2" },
-    { src: "assets/sacerdoce-royal03.png", alt: "Sacerdoce Royal — présentation de l’identité visuelle, visuel 3" },
-    { src: "assets/sacerdoce-royal04.png", alt: "Sacerdoce Royal — présentation de l’identité visuelle, visuel 4" },
-    { src: "assets/Sacerdoce%20royal_Charte%20Graphique_Final-10.png", alt: "Sacerdoce Royal — extrait complémentaire de la charte graphique, visuel 5" }
+  nano: [
+    { src: "assets/NaNo%20App01.png", alt: "NaNo Ring — média de présentation, visuel 1" },
+    { src: "assets/NaNo%20App02.png", alt: "NaNo Ring — média de présentation, visuel 2" },
+    { src: "assets/NaNo%20App03.png", alt: "NaNo Ring — média de présentation, visuel 3" },
+    { src: "assets/NaNo%20App04.png", alt: "NaNo Ring — média de présentation, visuel 4" },
+    { src: "assets/NaNo%20App06.png", alt: "NaNo Ring — média de présentation, visuel 5" },
+    { src: "assets/NaNo%20App07.png", alt: "NaNo Ring — média de présentation, visuel 6" },
+    { src: "assets/NaNo%20App08.png", alt: "NaNo Ring — média de présentation, visuel 7" }
   ],
-  magik: [
-    { src: "assets/magik-optik01.png", alt: "Magik Opti’k — identité de marque, visuel 1" },
-    { src: "assets/magik-optik02.png", alt: "Magik Opti’k — identité de marque, visuel 2" }
+  lundi: [
+    { src: "assets/atelier-lundi-pro01.PNG", alt: "Lundi Pro — atelier IA pour la recherche de stage, visuel 1" },
+    { src: "assets/atelier-lundi-pro02.PNG", alt: "Lundi Pro — atelier IA pour la recherche de stage, visuel 2" },
+    { src: "assets/atelier-lundi-pro03.PNG", alt: "Lundi Pro — atelier IA pour la recherche de stage, visuel 3" }
   ],
   codev: [
     { src: "assets/codev-grand-paris01.png", alt: "CODEV Grand Paris — document de cadrage, visuel 1" },
@@ -74,17 +95,36 @@ const galleryImages = {
     { src: "assets/codev-grand-paris03.png", alt: "CODEV Grand Paris — document de cadrage, visuel 3" },
     { src: "assets/codev-grand-paris04.png", alt: "CODEV Grand Paris — document de cadrage, visuel 4" }
   ],
-  plaine: [
-    { src: "assets/plaine-commune01.png", alt: "Plaine Commune — extrait du rapport institutionnel, visuel 1" },
-    { src: "assets/plaine-commune02.png", alt: "Plaine Commune — extrait du rapport institutionnel, visuel 2" }
-  ],
   scuio: [
     { src: "assets/guide-scuio-ip01.png", alt: "SCUIO-IP — guide sur l’IA générative, visuel 1" },
     { src: "assets/guide-scuio-ip02.png", alt: "SCUIO-IP — guide sur l’IA générative, visuel 2" }
   ],
-  lundi: [
-    { src: "assets/atelier-lundi-pro01.PNG", alt: "Lundi Pro — atelier IA pour la recherche de stage, visuel 1" },
-    { src: "assets/atelier-lundi-pro02.PNG", alt: "Lundi Pro — atelier IA pour la recherche de stage, visuel 2" }
+  plaine: [
+    { src: "assets/plaine-commune01.png", alt: "Plaine Commune — extrait du rapport institutionnel, visuel 1" },
+    { src: "assets/plaine-commune02.png", alt: "Plaine Commune — extrait du rapport institutionnel, visuel 2" }
+  ],
+  sacerdoce: [
+    { src: "assets/sacerdoce-royal01.png", alt: "Sacerdoce Royal — identité visuelle, visuel 1" },
+    { src: "assets/sacerdoce-royal02.png", alt: "Sacerdoce Royal — identité visuelle, visuel 2" },
+    { src: "assets/sacerdoce-royal03.png", alt: "Sacerdoce Royal — identité visuelle, visuel 3" },
+    { src: "assets/sacerdoce-royal04.png", alt: "Sacerdoce Royal — identité visuelle, visuel 4" },
+    { src: "assets/sacerdoce-royal05.png", alt: "Sacerdoce Royal — identité visuelle, visuel 5" },
+    { src: "assets/sacerdoce-royal06.png", alt: "Sacerdoce Royal — identité visuelle, visuel 6" }
+  ],
+  magik: [
+    { src: "assets/magik-optik01.png", alt: "Magik Opti’k — identité de marque, visuel 1" },
+    { src: "assets/magik-optik02.png", alt: "Magik Opti’k — identité de marque, visuel 2" }
+  ],
+  agency: [
+    { src: "assets/893%C2%B0%2001.png", alt: "893° — communication d’agence, visuel 1" },
+    { src: "assets/893%20%C2%B0%2002.png", alt: "893° — communication d’agence, visuel 2" },
+    { src: "assets/893%20%C2%B0%2003.png", alt: "893° — communication d’agence, visuel 3" },
+    { src: "assets/893%20%C2%B0%2004.png", alt: "893° — communication d’agence, visuel 4" }
+  ],
+  autres: [
+    { src: "assets/Autres01.png", alt: "Autres créations — visuel 1" },
+    { src: "assets/Autres02.png", alt: "Autres créations — visuel 2" },
+    { src: "assets/Autres03.png", alt: "Autres créations — visuel 3" }
   ]
 };
 
