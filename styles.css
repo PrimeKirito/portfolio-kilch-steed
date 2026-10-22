@@ -69,3 +69,21 @@
   .hero-title-line-inner{animation:none!important;opacity:1!important;transform:none!important}
   .project-gallery .project-image img{transition:none!important;transform:none!important}
 }
+
+
+/* Hero title: staggered drop-in with a restrained rebound */
+.hero-title-line-inner{
+  transform:translateY(-135%);
+  transform-origin:center top;
+  animation:heroTextDrop .95s cubic-bezier(.22,.85,.27,1.12) both;
+  animation-delay:calc(var(--line-order,0) * 120ms);
+}
+@keyframes heroTextDrop{
+  0%{opacity:0;transform:translateY(-135%) rotate(-1.5deg)}
+  62%{opacity:1;transform:translateY(7%) rotate(.3deg)}
+  78%{opacity:1;transform:translateY(-3%) rotate(-.12deg)}
+  100%{opacity:1;transform:translateY(0) rotate(0)}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero-title-line-inner{animation:none!important;opacity:1!important;transform:none!important}
+}
