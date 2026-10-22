@@ -55,6 +55,82 @@ filterButtons.forEach((button) => {
   });
 });
 
+
+const galleryImages = {
+  sacerdoce: [
+    { src: "assets/sacerdoce-royal01.png", alt: "Sacerdoce Royal — présentation de l’identité visuelle, visuel 1" },
+    { src: "assets/sacerdoce-royal02.png", alt: "Sacerdoce Royal — présentation de l’identité visuelle, visuel 2" },
+    { src: "assets/sacerdoce-royal03.png", alt: "Sacerdoce Royal — présentation de l’identité visuelle, visuel 3" },
+    { src: "assets/sacerdoce-royal04.png", alt: "Sacerdoce Royal — présentation de l’identité visuelle, visuel 4" },
+    { src: "assets/Sacerdoce%20royal_Charte%20Graphique_Final-10.png", alt: "Sacerdoce Royal — extrait complémentaire de la charte graphique" }
+  ],
+  magik: [
+    { src: "assets/magik-optik01.png", alt: "Magik Opti’k — identité de marque, visuel 1" },
+    { src: "assets/magik-optik02.png", alt: "Magik Opti’k — identité de marque, visuel 2" }
+  ],
+  codev: [
+    { src: "assets/codev-grand-paris01.png", alt: "CODEV Grand Paris — document de cadrage, visuel 1" },
+    { src: "assets/codev-grand-paris02.png", alt: "CODEV Grand Paris — document de cadrage, visuel 2" },
+    { src: "assets/codev-grand-paris03.png", alt: "CODEV Grand Paris — document de cadrage, visuel 3" },
+    { src: "assets/codev-grand-paris04.png", alt: "CODEV Grand Paris — document de cadrage, visuel 4" }
+  ],
+  plaine: [
+    { src: "assets/plaine-commune01.png", alt: "Plaine Commune — extrait du rapport institutionnel, visuel 1" },
+    { src: "assets/plaine-commune02.png", alt: "Plaine Commune — extrait du rapport institutionnel, visuel 2" }
+  ],
+  scuio: [
+    { src: "assets/guide-scuio-ip01.png", alt: "SCUIO-IP — guide sur l’IA générative, visuel 1" },
+    { src: "assets/guide-scuio-ip02.png", alt: "SCUIO-IP — guide sur l’IA générative, visuel 2" }
+  ],
+  lundi: [
+    { src: "assets/atelier-lundi-pro01.PNG", alt: "Lundi Pro — atelier IA pour la recherche de stage, visuel 1" },
+    { src: "assets/atelier-lundi-pro02.PNG", alt: "Lundi Pro — atelier IA pour la recherche de stage, visuel 2" }
+  ]
+};
+
+document.querySelectorAll("[data-gallery]").forEach((gallery) => {
+  const images = galleryImages[gallery.dataset.gallery];
+  const imageElement = gallery.querySelector(".gallery-image");
+  const counter = gallery.querySelector(".gallery-counter");
+  const previousButton = gallery.querySelector("[data-gallery-prev]");
+  const nextButton = gallery.querySelector("[data-gallery-next]");
+
+  if (!images || images.length < 2 || !imageElement || !counter || !previousButton || !nextButton) return;
+
+  let currentIndex = 0;
+
+  const showImage = (requestedIndex) => {
+    currentIndex = (requestedIndex + images.length) % images.length;
+    const selectedImage = images[currentIndex];
+    imageElement.classList.add("is-changing");
+    imageElement.src = selectedImage.src;
+    imageElement.alt = selectedImage.alt;
+    counter.textContent = String(currentIndex + 1) + " / " + String(images.length);
+    imageElement.addEventListener("load", () => {
+      imageElement.classList.remove("is-changing");
+    }, { once: true });
+    imageElement.addEventListener("error", () => {
+      imageElement.classList.remove("is-changing");
+      counter.textContent = "Image indisponible";
+    }, { once: true });
+  };
+
+  previousButton.addEventListener("click", () => showImage(currentIndex - 1));
+  nextButton.addEventListener("click", () => showImage(currentIndex + 1));
+
+  let touchStartX = null;
+  gallery.addEventListener("touchstart", (event) => {
+    touchStartX = event.changedTouches[0].clientX;
+  }, { passive: true });
+  gallery.addEventListener("touchend", (event) => {
+    if (touchStartX === null) return;
+    const distance = event.changedTouches[0].clientX - touchStartX;
+    touchStartX = null;
+    if (Math.abs(distance) < 45) return;
+    showImage(currentIndex + (distance < 0 ? 1 : -1));
+  }, { passive: true });
+});
+
 const menuToggle = document.querySelector(".menu-toggle");
 const navigation = document.querySelector("#navigation");
 
