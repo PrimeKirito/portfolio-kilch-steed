@@ -52,3 +52,20 @@
 .project-open .project-meta{padding-top:.15rem}
 .project-open:hover .project-meta strong{color:var(--blue)}
 @media(max-width:430px){.gallery-controls{right:.5rem;bottom:.5rem;left:.5rem}.gallery-control{width:2.25rem;height:2.25rem}.gallery-counter{min-height:2.25rem;padding:.45rem .6rem}}
+
+
+/* Hero title: staggered editorial entrance */
+.hero-title-line{display:block;overflow:hidden;padding:.06em 0 .12em;margin:-.06em 0 -.12em}
+.hero-title-line-inner{display:inline-block;opacity:0;transform:translateY(108%);animation:heroTextEnter .82s cubic-bezier(.2,.72,.2,1) both;animation-delay:calc(var(--line-order,0) * 115ms)}
+@keyframes heroTextEnter{from{opacity:0;transform:translateY(108%)}to{opacity:1;transform:translateY(0)}}
+
+/* Carousel: clear, smooth horizontal slide between project images */
+.project-gallery .project-image{overflow:hidden}
+.project-gallery .project-image img{transform:translateX(0);will-change:transform,opacity}
+.project-gallery .project-image img.is-changing{opacity:0;transform:translateX(var(--slide-offset,1rem))}
+.gallery-control{box-shadow:0 1px 8px rgba(23,24,22,.08)}
+.gallery-counter{box-shadow:0 1px 8px rgba(23,24,22,.06)}
+@media(prefers-reduced-motion:reduce){
+  .hero-title-line-inner{animation:none!important;opacity:1!important;transform:none!important}
+  .project-gallery .project-image img{transition:none!important;transform:none!important}
+}
