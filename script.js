@@ -55,6 +55,105 @@ filterButtons.forEach((button) => {
   });
 });
 
+
+const galleryImages = {
+  sacerdoce: [
+    { src: "assets/sacerdoce-royal01.png", alt: "Sacerdoce Royal — présentation de l’identité visuelle, visuel 1" },
+    { src: "assets/sacerdoce-royal02.png", alt: "Sacerdoce Royal — présentation de l’identité visuelle, visuel 2" },
+    { src: "assets/sacerdoce-royal03.png", alt: "Sacerdoce Royal — présentation de l’identité visuelle, visuel 3" },
+    { src: "assets/sacerdoce-royal04.png", alt: "Sacerdoce Royal — présentation de l’identité visuelle, visuel 4" },
+    { src: "assets/Sacerdoce%20royal_Charte%20Graphique_Final-10.png", alt: "Sacerdoce Royal — extrait complémentaire de la charte graphique, visuel 5" }
+  ],
+  magik: [
+    { src: "assets/magik-optik01.png", alt: "Magik Opti’k — identité de marque, visuel 1" },
+    { src: "assets/magik-optik02.png", alt: "Magik Opti’k — identité de marque, visuel 2" }
+  ],
+  codev: [
+    { src: "assets/codev-grand-paris01.png", alt: "CODEV Grand Paris — document de cadrage, visuel 1" },
+    { src: "assets/codev-grand-paris02.png", alt: "CODEV Grand Paris — document de cadrage, visuel 2" },
+    { src: "assets/codev-grand-paris03.png", alt: "CODEV Grand Paris — document de cadrage, visuel 3" },
+    { src: "assets/codev-grand-paris04.png", alt: "CODEV Grand Paris — document de cadrage, visuel 4" }
+  ],
+  plaine: [
+    { src: "assets/plaine-commune01.png", alt: "Plaine Commune — extrait du rapport institutionnel, visuel 1" },
+    { src: "assets/plaine-commune02.png", alt: "Plaine Commune — extrait du rapport institutionnel, visuel 2" }
+  ],
+  scuio: [
+    { src: "assets/guide-scuio-ip01.png", alt: "SCUIO-IP — guide sur l’IA générative, visuel 1" },
+    { src: "assets/guide-scuio-ip02.png", alt: "SCUIO-IP — guide sur l’IA générative, visuel 2" }
+  ],
+  lundi: [
+    { src: "assets/atelier-lundi-pro01.PNG", alt: "Lundi Pro — atelier IA pour la recherche de stage, visuel 1" },
+    { src: "assets/atelier-lundi-pro02.PNG", alt: "Lundi Pro — atelier IA pour la recherche de stage, visuel 2" }
+  ]
+};
+
+document.querySelectorAll("[data-gallery]").forEach((gallery) => {
+  const images = galleryImages[gallery.dataset.gallery];
+  const imageElement = gallery.querySelector(".gallery-image");
+  const counter = gallery.querySelector(".gallery-counter");
+  const previousButton = gallery.querySelector("[data-gallery-prev]");
+  const nextButton = gallery.querySelector("[data-gallery-next]");
+
+  if (!images || images.length < 2 || !imageElement || !counter || !previousButton || !nextButton) return;
+
+  let currentIndex = 0;
+  let isLoading = false;
+  let touchStartX = null;
+
+  const showImage = (requestedIndex, direction = 1) => {
+    if (isLoading) return;
+    const nextIndex = (requestedIndex + images.length) % images.length;
+    if (nextIndex === currentIndex) return;
+
+    isLoading = true;
+    const selectedImage = images[nextIndex];
+    const preload = new Image();
+
+    preload.onload = () => {
+      gallery.style.setProperty("--slide-offset", direction > 0 ? "1.1rem" : "-1.1rem");
+      imageElement.classList.add("is-changing");
+      imageElement.src = selectedImage.src;
+      imageElement.alt = selectedImage.alt;
+      currentIndex = nextIndex;
+      counter.textContent = String(currentIndex + 1) + " / " + String(images.length);
+
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          imageElement.classList.remove("is-changing");
+          isLoading = false;
+        });
+      });
+    };
+
+    preload.onerror = () => {
+      counter.textContent = "Image indisponible";
+      isLoading = false;
+    };
+    preload.src = selectedImage.src;
+  };
+
+  previousButton.addEventListener("click", () => showImage(currentIndex - 1, -1));
+  nextButton.addEventListener("click", () => showImage(currentIndex + 1, 1));
+
+  gallery.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") showImage(currentIndex - 1, -1);
+    if (event.key === "ArrowRight") showImage(currentIndex + 1, 1);
+  });
+
+  gallery.addEventListener("touchstart", (event) => {
+    touchStartX = event.changedTouches[0].clientX;
+  }, { passive: true });
+
+  gallery.addEventListener("touchend", (event) => {
+    if (touchStartX === null) return;
+    const distance = event.changedTouches[0].clientX - touchStartX;
+    touchStartX = null;
+    if (Math.abs(distance) < 45) return;
+    showImage(currentIndex + (distance < 0 ? 1 : -1), distance < 0 ? 1 : -1);
+  }, { passive: true });
+});
+
 const menuToggle = document.querySelector(".menu-toggle");
 const navigation = document.querySelector("#navigation");
 
