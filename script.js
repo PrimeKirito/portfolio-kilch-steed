@@ -1,27 +1,39 @@
 const projectContent = {
   sacerdoce: {
-    title: "Sacerdoce Royale",
-    description: "Une identité visuelle conçue pour rendre une marque immédiatement reconnaissable, avec un système graphique cohérent entre les supports. Cette fiche sera enrichie avec le contexte, les livrables et les visuels validés.",
-    role: "Identité visuelle et direction artistique.",
-    next: "Brief, démarche créative, déclinaisons et contribution exacte."
+    title: "Sacerdoce Royal — identité visuelle",
+    description: "Conception d’une charte graphique pour Sacerdoce Royal. Le document présente notamment le logotype, ses variantes, la palette chromatique, la typographie et des exemples d’application. L’aperçu public montre une seule application de l’identité.",
+    role: "Designer identifié sur la charte graphique : conception de l’identité visuelle et formalisation de ses règles d’usage.",
+    next: "L’aperçu ne donne pas accès à la charte complète. D’autres applications seront ajoutées au fil de la sélection."
+  },
+  magik: {
+    title: "Magik Opti’k — charte graphique",
+    description: "Une charte graphique pour une marque de magasin d’optique, autour d’un logotype qui associe la lettre M à une paire de lunettes. Le document présente également les variantes, les couleurs, la typographie et des applications de la marque.",
+    role: "Conception graphique et formalisation d’un système d’identité visuelle.",
+    next: "L’aperçu présente seulement une sélection d’applications, sans publier la charte complète."
   },
   codev: {
-    title: "CODEV Métropole du Grand Paris",
-    description: "Un projet audiovisuel comprenant plusieurs témoignages, de la préparation éditoriale à la coordination de production et au montage. La présentation finale précisera le périmètre de la mission et les livrables autorisés.",
-    role: "Coordination de projet et contribution à la production vidéo.",
-    next: "Contexte, rôle détaillé, extraits autorisés et étapes de production."
+    title: "CODEV — Métropole du Grand Paris",
+    description: "Dans le cadre de sa mission auprès du CODEV de la Métropole du Grand Paris, l’agence 893° a cadré la production d’une série de quatre vidéos de témoignage. Le document de travail décrit la préparation éditoriale, l’organisation des tournages et la post-production ; ces éléments internes ne sont pas reproduits ici.",
+    role: "Pilotage d’une production audiovisuelle pendant mon stage de fin d’études à l’agence 893°, conformément à mon CV.",
+    next: "Cette fiche montre uniquement la couverture du document de cadrage. Les calendriers, plannings et détails opérationnels restent privés."
   },
   plaine: {
-    title: "Plaine Commune",
-    description: "Un travail de conception éditoriale et de mise en page visant à structurer l'information et à faciliter la lecture d'une publication. Les pages présentées seront ajoutées après validation des droits de diffusion.",
-    role: "Design éditorial et mise en page.",
-    next: "Document final, contraintes, méthode et captures autorisées."
+    title: "Plaine Commune — rapport institutionnel",
+    description: "Participation à la production éditoriale et à la mise en page d’un rapport institutionnel consacré aux actes d’une journée d’échanges sur la clause sociale et l’achat responsable. L’aperçu retenu est un extrait infographique, plutôt que le rapport intégral.",
+    role: "Production éditoriale et mise en page, selon l’expérience présentée dans mon CV.",
+    next: "Le rapport complet n’est pas disponible au téléchargement. Seul un extrait visuel est présenté dans ce portfolio."
   },
-  strategie: {
-    title: "Guides & ateliers IA — Université Paris 8",
-    description: "Conception de guides et d’ateliers sur l’IA générative à destination des membres du service SCUIO-IP de l’Université Paris 8, dans le cadre du stage de fin d’études réalisé à l’agence 893°.",
-    role: "Conception de supports de formation et préparation d’ateliers.",
-    next: "Ajouter les visuels autorisés, préciser les objectifs pédagogiques et décrire les livrables réellement produits."
+  scuio: {
+    title: "SCUIO-IP — guide sur l’IA générative",
+    description: "Conception d’un guide pour accompagner les agents du SCUIO-IP de l’Université Paris 8 dans l’usage réfléchi de l’IA générative pour la recherche d’emploi. Le support traite notamment de l’amélioration du CV, des lettres de motivation et de la préparation aux entretiens.",
+    role: "Chef de projet et contribution à la conception et à la rédaction au sein de l’agence 893°, en collaboration avec Narcisse N’OUEMOU et l’équipe.",
+    next: "Seule la couverture est présentée. Le guide complet n’est pas publié sur ce site."
+  },
+  lundi: {
+    title: "Lundi Pro — atelier sur l’IA",
+    description: "Support de l’atelier « Mieux utiliser l’IA pour sa recherche de stage ou d’alternance », avec des objectifs pédagogiques, une méthode C.O.R.E. et des repères pour un usage réfléchi des outils. La présentation attribue l’animation à Kelch Steed EYEGHE et Narcisse N’OUEMOU.",
+    role: "Co-animation et contribution à la conception du support avec Narcisse N’OUEMOU au sein de l’agence 893°.",
+    next: "Une diapositive sélectionnée est présentée ; le support complet n’est pas publié."
   }
 };
 
