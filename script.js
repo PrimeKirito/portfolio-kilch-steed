@@ -458,7 +458,6 @@ async function loadUseAnimation(iconElement) {
       const animation = svg.querySelector("animateTransform");
       if (!animation || reducedMotion.matches) return;
       try {
-        animation.endElement();
         animation.beginElement();
       } catch (_) {
         // The static vector still remains usable if SMIL is unavailable.
