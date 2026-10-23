@@ -30,7 +30,7 @@ const projectContent = {
     next: "Seule la couverture est présentée. Le guide complet n’est pas publié sur ce site."
   },
   lundi: {
-    title: "Lundi Pro — atelier sur l’IA",
+    title: "Atelier IA",
     description: "Support de l’atelier « Mieux utiliser l’IA pour sa recherche de stage ou d’alternance », avec des objectifs pédagogiques, une méthode C.O.R.E. et des repères pour un usage réfléchi des outils. La présentation attribue l’animation à Kelch Steed EYEGHE et Narcisse N’OUEMOU.",
     role: "Co-animation et contribution à la conception du support avec Narcisse N’OUEMOU au sein de l’agence 893°.",
     next: "Trois médias sélectionnés sont présentés ; le support complet n’est pas publié."
@@ -111,9 +111,9 @@ const galleryImages = {
     { src: "assets/NaNo%20App08.png", alt: "NaNo Ring — média de présentation, visuel 7" }
   ],
   lundi: [
-    { src: "assets/atelier-lundi-pro01.PNG", alt: "Lundi Pro — atelier IA pour la recherche de stage, visuel 1" },
-    { src: "assets/atelier-lundi-pro02.PNG", alt: "Lundi Pro — atelier IA pour la recherche de stage, visuel 2" },
-    { src: "assets/atelier-lundi-pro03.PNG", alt: "Lundi Pro — atelier IA pour la recherche de stage, visuel 3" }
+    { src: "assets/atelier-lundi-pro01.PNG", alt: "Atelier IA pour la recherche de stage, visuel 1" },
+    { src: "assets/atelier-lundi-pro02.PNG", alt: "Atelier IA pour la recherche de stage, visuel 2" },
+    { src: "assets/atelier-lundi-pro03.PNG", alt: "Atelier IA pour la recherche de stage, visuel 3" }
   ],
   codev: [
     { src: "assets/codev-grand-paris01.png", alt: "CODEV Grand Paris — document de cadrage, visuel 1" },
@@ -306,10 +306,9 @@ if ("IntersectionObserver" in window && navSections.length) {
 
 // Lightweight UseAnimations icon adapter for the simple path + translate JSON exports.
 // Keeps the animation JSON local; no third-party player or remote script is loaded.
+// The gallery chevrons stay static by design: without JSON files, their original ← / → text remains visible.
 const animationFiles = {
-  "arrow-down-right": "assets/animations/arrow-down-right.json",
-  "chevron-left": "assets/animations/chevron-left.json",
-  "chevron-right": "assets/animations/chevron-right.json"
+  "arrow-down-right": "assets/animations/arrow-down-right.json"
 };
 
 const animationDataCache = new Map();
