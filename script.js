@@ -55,6 +55,32 @@ const projectContent = {
   }
 };
 
+// Enforce the portfolio order at runtime as a safeguard against stale markup.
+const preferredProjectOrder = [
+  "codev",
+  "plaine",
+  "nano",
+  "lundi",
+  "sacerdoce",
+  "agency",
+  "scuio",
+  "magik",
+  "autres"
+];
+const projectGrid = document.querySelector(".project-grid");
+if (projectGrid) {
+  const cardsInGrid = Array.from(projectGrid.querySelectorAll(".project-card"));
+  cardsInGrid.sort((a, b) => {
+    const aId = a.querySelector("[data-gallery]")?.dataset.gallery;
+    const bId = b.querySelector("[data-gallery]")?.dataset.gallery;
+    const aIndex = preferredProjectOrder.indexOf(aId);
+    const bIndex = preferredProjectOrder.indexOf(bId);
+    return (aIndex < 0 ? preferredProjectOrder.length : aIndex) -
+      (bIndex < 0 ? preferredProjectOrder.length : bIndex);
+  });
+  cardsInGrid.forEach((card) => projectGrid.appendChild(card));
+}
+
 const filterButtons = document.querySelectorAll("[data-filter]");
 const projectCards = document.querySelectorAll(".project-card");
 
