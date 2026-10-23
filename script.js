@@ -242,3 +242,36 @@ dialog?.addEventListener("click", (event) => {
 
 const currentYear = document.querySelector("#current-year");
 if (currentYear) currentYear.textContent = String(new Date().getFullYear());
+
+// Keep the top navigation in sync with the section currently being viewed.
+const navLinks = Array.from(document.querySelectorAll("#navigation a"));
+const navSections = navLinks
+  .map((link) => document.querySelector(link.getAttribute("href")))
+  .filter(Boolean);
+
+const setCurrentNavLink = (sectionId) => {
+  navLinks.forEach((link) => {
+    const isCurrent = link.getAttribute("href") === "#" + sectionId;
+    link.classList.toggle("is-current", isCurrent);
+    if (isCurrent) link.setAttribute("aria-current", "location");
+    else link.removeAttribute("aria-current");
+  });
+};
+
+navLinks.forEach((link) => {
+  link.addEventListener("click", () => {
+    const targetId = link.getAttribute("href")?.slice(1);
+    if (targetId) setCurrentNavLink(targetId);
+  });
+});
+
+if ("IntersectionObserver" in window && navSections.length) {
+  const navObserver = new IntersectionObserver((entries) => {
+    const visibleSections = entries
+      .filter((entry) => entry.isIntersecting)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+    if (visibleSections[0]) setCurrentNavLink(visibleSections[0].target.id);
+  }, { rootMargin: "-18% 0px -65% 0px", threshold: [0, 0.15, 0.35, 0.6] });
+
+  navSections.forEach((section) => navObserver.observe(section));
+}
