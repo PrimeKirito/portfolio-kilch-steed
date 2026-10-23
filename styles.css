@@ -129,3 +129,15 @@
   .navigation a,.navigation a::after,.navigation a span,.navigation{transition:none!important}
   .navigation a,.navigation{transform:none!important}
 }
+
+
+/* Explicit visual order for the project grid (same order on every viewport) */
+.project-grid .project-card:has([data-gallery="codev"]){order:1}
+.project-grid .project-card:has([data-gallery="plaine"]){order:2}
+.project-grid .project-card:has([data-gallery="nano"]){order:3}
+.project-grid .project-card:has([data-gallery="lundi"]){order:4}
+.project-grid .project-card:has([data-gallery="sacerdoce"]){order:5}
+.project-grid .project-card:has([data-gallery="agency"]){order:6}
+.project-grid .project-card:has([data-gallery="scuio"]){order:7}
+.project-grid .project-card:has([data-gallery="magik"]){order:8}
+.project-grid .project-card:has([data-gallery="autres"]){order:9}
