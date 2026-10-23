@@ -344,6 +344,15 @@ function toSvgPath(shape) {
   return path;
 }
 
+function collectShapeItems(shapes, type, results = []) {
+  (shapes || []).forEach(shape => {
+    if (shape.ty === type) results.push(shape);
+    if (Array.isArray(shape.it)) collectShapeItems(shape.it, type, results);
+    if (Array.isArray(shape.shapes)) collectShapeItems(shape.shapes, type, results);
+  });
+  return results;
+}
+
 function animationPosition(keyframe, fallback) {
   const value = keyframe?.s;
   if (Array.isArray(value) && Array.isArray(value[0])) return value[0];
@@ -367,7 +376,9 @@ function createAnimatedSvg(data, iconName) {
   const durationFrames = Math.max(1, Number(data.op || 36) - Number(data.ip || 0));
   const frameRate = Math.max(1, Number(data.fr || 30));
   const animationDuration = durationFrames / frameRate;
-  const strokeShape = layer.shapes.find(shape => shape.ty === "st");
+  const pathShapes = collectShapeItems(layer.shapes, "sh");
+  if (!pathShapes.length) throw new Error("Aucun tracé vectoriel exploitable pour " + iconName);
+  const strokeShape = collectShapeItems(layer.shapes, "st")[0];
   const strokeWidth = Number(strokeShape?.w || 2);
 
   const svg = document.createElementNS(ns, "svg");
@@ -381,7 +392,7 @@ function createAnimatedSvg(data, iconName) {
   const group = document.createElementNS(ns, "g");
   group.setAttribute("transform", `translate(${base[0] - Number(anchor[0] || 0)} ${base[1] - Number(anchor[1] || 0)})`);
 
-  layer.shapes.filter(shape => shape.ty === "sh").forEach(shape => {
+  pathShapes.forEach(shape => {
     const pathData = toSvgPath(shape);
     if (!pathData) return;
     const path = document.createElementNS(ns, "path");
@@ -442,7 +453,7 @@ async function loadUseAnimation(iconElement) {
   try {
     let promise = animationDataCache.get(path);
     if (!promise) {
-      promise = fetch(path).then(response => {
+      promise = fetch(path + "?v=icons-visible-20261023").then(response => {
         if (!response.ok) throw new Error("Chargement impossible : " + path);
         return response.json();
       });
