@@ -301,3 +301,195 @@ if ("IntersectionObserver" in window && navSections.length) {
 
   navSections.forEach((section) => navObserver.observe(section));
 }
+
+
+
+// Lightweight UseAnimations icon adapter for the simple path + translate JSON exports.
+// Keeps the animation JSON local; no third-party player or remote script is loaded.
+const animationFiles = {
+  "arrow-down-right": "assets/animations/arrow-down-right.json",
+  "chevron-left": "assets/animations/chevron-left.json",
+  "chevron-right": "assets/animations/chevron-right.json"
+};
+
+const animationDataCache = new Map();
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+function toSvgPath(shape) {
+  const geometry = shape?.ks?.k;
+  if (!geometry || !Array.isArray(geometry.v) || !geometry.v.length) return "";
+  const vertices = geometry.v;
+  const incoming = geometry.i || vertices.map(() => [0, 0]);
+  const outgoing = geometry.o || vertices.map(() => [0, 0]);
+  const isStraight = vertices.every((_, index) =>
+    (incoming[index] || [0, 0]).every(value => value === 0) &&
+    (outgoing[index] || [0, 0]).every(value => value === 0)
+  );
+  const command = (point) => `${Number(point[0].toFixed(3))} ${Number(point[1].toFixed(3))}`;
+  let path = "M " + command(vertices[0]);
+  for (let index = 1; index < vertices.length; index += 1) {
+    if (isStraight) {
+      path += " L " + command(vertices[index]);
+    } else {
+      const previous = vertices[index - 1];
+      const next = vertices[index];
+      const out = outgoing[index - 1] || [0, 0];
+      const incomingPoint = incoming[index] || [0, 0];
+      path += " C " + command([previous[0] + out[0], previous[1] + out[1]]) +
+        " " + command([next[0] + incomingPoint[0], next[1] + incomingPoint[1]]) +
+        " " + command(next);
+    }
+  }
+  if (geometry.c) path += " Z";
+  return path;
+}
+
+function animationPosition(keyframe, fallback) {
+  const value = keyframe?.s;
+  if (Array.isArray(value) && Array.isArray(value[0])) return value[0];
+  if (Array.isArray(value)) return value;
+  return fallback;
+}
+
+function createAnimatedSvg(data, iconName) {
+  const ns = "http://www.w3.org/2000/svg";
+  const layer = (data.layers || []).find(item => item.ty === 4 && Array.isArray(item.shapes));
+  if (!layer) throw new Error("Aucune couche vectorielle prise en charge pour " + iconName);
+
+  const anchorValue = layer.ks?.a?.k;
+  const anchor = Array.isArray(anchorValue) ? anchorValue : [0, 0, 0];
+  const position = layer.ks?.p;
+  const positionKeys = position?.a === 1 && Array.isArray(position.k)
+    ? position.k
+    : [];
+  const firstPosition = animationPosition(positionKeys[0], Array.isArray(position?.k) ? position.k : [16, 16, 0]);
+  const base = [Number(firstPosition[0] ?? 16), Number(firstPosition[1] ?? 16)];
+  const durationFrames = Math.max(1, Number(data.op || 36) - Number(data.ip || 0));
+  const frameRate = Math.max(1, Number(data.fr || 30));
+  const animationDuration = durationFrames / frameRate;
+  const strokeShape = layer.shapes.find(shape => shape.ty === "st");
+  const strokeWidth = Number(strokeShape?.w || 2);
+
+  const svg = document.createElementNS(ns, "svg");
+  svg.setAttribute("viewBox", `0 0 ${Number(data.w || 32)} ${Number(data.h || 32)}`);
+  svg.setAttribute("width", "1em");
+  svg.setAttribute("height", "1em");
+  svg.setAttribute("focusable", "false");
+  svg.setAttribute("aria-hidden", "true");
+  svg.classList.add("useanimation-svg", "useanimation-" + iconName);
+
+  const group = document.createElementNS(ns, "g");
+  group.setAttribute("transform", `translate(${base[0] - Number(anchor[0] || 0)} ${base[1] - Number(anchor[1] || 0)})`);
+
+  layer.shapes.filter(shape => shape.ty === "sh").forEach(shape => {
+    const pathData = toSvgPath(shape);
+    if (!pathData) return;
+    const path = document.createElementNS(ns, "path");
+    path.setAttribute("d", pathData);
+    path.setAttribute("fill", "none");
+    path.setAttribute("stroke", "currentColor");
+    path.setAttribute("stroke-width", String(strokeWidth));
+    path.setAttribute("stroke-linecap", "round");
+    path.setAttribute("stroke-linejoin", "round");
+    group.appendChild(path);
+  });
+
+  if (!reducedMotion.matches && positionKeys.length > 1) {
+    const translateAnimation = document.createElementNS(ns, "animateTransform");
+    translateAnimation.setAttribute("attributeName", "transform");
+    translateAnimation.setAttribute("type", "translate");
+    translateAnimation.setAttribute("dur", animationDuration + "s");
+    translateAnimation.setAttribute("begin", "indefinite");
+    translateAnimation.setAttribute("fill", "freeze");
+    translateAnimation.setAttribute("calcMode", "linear");
+
+    const keyTimes = [];
+    const values = [];
+    positionKeys.forEach((keyframe) => {
+      const frame = Number(keyframe.t ?? 0) - Number(data.ip || 0);
+      if (frame < 0 || frame > durationFrames) return;
+      const time = Math.max(0, Math.min(1, frame / durationFrames));
+      const pos = animationPosition(keyframe, base);
+      if (!Array.isArray(pos)) return;
+      keyTimes.push(time.toFixed(5));
+      values.push(`${Number(pos[0] ?? base[0]) - Number(anchor[0] || 0)} ${Number(pos[1] ?? base[1]) - Number(anchor[1] || 0)}`);
+    });
+
+    if (keyTimes.length && Number(keyTimes[keyTimes.length - 1]) < 1) {
+      keyTimes.push("1");
+      const lastValue = values[values.length - 1];
+      values.push(lastValue);
+    }
+
+    const pairs = keyTimes.map((time, index) => ({ time: Number(time), value: values[index] }))
+      .filter((item, index, all) => index === 0 || item.time > all[index - 1].time);
+    if (pairs.length > 1) {
+      translateAnimation.setAttribute("keyTimes", pairs.map(pair => pair.time.toFixed(5)).join(";"));
+      translateAnimation.setAttribute("values", pairs.map(pair => pair.value).join(";"));
+      group.appendChild(translateAnimation);
+    }
+  }
+
+  svg.appendChild(group);
+  return svg;
+}
+
+async function loadUseAnimation(iconElement) {
+  const animationName = iconElement.dataset.animation;
+  const path = animationFiles[animationName];
+  if (!path) return;
+
+  try {
+    let promise = animationDataCache.get(path);
+    if (!promise) {
+      promise = fetch(path).then(response => {
+        if (!response.ok) throw new Error("Chargement impossible : " + path);
+        return response.json();
+      });
+      animationDataCache.set(path, promise);
+    }
+
+    const data = await promise;
+    const svg = createAnimatedSvg(data, animationName);
+    iconElement.replaceChildren(svg);
+    iconElement.dataset.animationReady = "true";
+
+    const play = () => {
+      const animation = svg.querySelector("animateTransform");
+      if (!animation || reducedMotion.matches) return;
+      try {
+        animation.endElement();
+        animation.beginElement();
+      } catch (_) {
+        // The static vector still remains usable if SMIL is unavailable.
+      }
+    };
+
+    const trigger = iconElement.closest("a, button") || iconElement;
+    if (animationName === "arrow-down-right") {
+      trigger.addEventListener("pointerenter", play);
+      trigger.addEventListener("focus", play);
+      trigger.addEventListener("click", play);
+    } else {
+      trigger.addEventListener("click", play);
+      trigger.addEventListener("pointerenter", play);
+      trigger.addEventListener("focus", play);
+    }
+  } catch (error) {
+    // Preserve the original text arrow as a fallback; don't interrupt navigation.
+    console.warn("UseAnimations :", error);
+  }
+}
+
+document.querySelectorAll(".animated-icon[data-animation]").forEach(icon => {
+  loadUseAnimation(icon);
+});
+
+if (reducedMotion.addEventListener) {
+  reducedMotion.addEventListener("change", () => {
+    // Reloading the page is not required for navigation; the fallback remains safe.
+    document.querySelectorAll(".useanimation-svg animateTransform").forEach(animation => {
+      if (reducedMotion.matches) animation.remove();
+    });
+  });
+}
