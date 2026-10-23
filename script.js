@@ -1,7 +1,7 @@
 const projectContent = {
   sacerdoce: {
     title: "Sacerdoce Royal — identité visuelle",
-    description: "Conception d’une charte graphique pour Sacerdoce Royal. Le document présente notamment le logotype, ses variantes, la palette chromatique, la typographie et des exemples d’application. La galerie présente six visuels sélectionnés de l’identité.",
+    description: "Extrait de la **charte graphique de Sacerdoce Royal**, conçue et réalisée par mes soins en 2026. Le document complet ne pouvant être téléchargé, cet aperçu présente une sélection de ses éléments visuels.",
     role: "Designer identifié sur la charte graphique : conception de l’identité visuelle et formalisation de ses règles d’usage.",
     next: "La galerie rassemble six visuels sélectionnés. La charte complète n’est pas publiée sur ce site."
   },
@@ -31,7 +31,7 @@ const projectContent = {
   },
   lundi: {
     title: "Atelier IA",
-    description: "Support de l’atelier « Mieux utiliser l’IA pour sa recherche de stage ou d’alternance », avec des objectifs pédagogiques, une méthode C.O.R.E. et des repères pour un usage réfléchi des outils. La présentation attribue l’animation à Kelch Steed EYEGHE et Narcisse N’OUEMOU.",
+    description: "Aperçu du support de l’atelier **« Mieux utiliser l’IA pour sa recherche de stage ou d’alternance »**, destiné aux étudiants de l’Université Paris 8. Il présente les objectifs pédagogiques, la méthode C.O.R.E. et les clés d’un usage réfléchi de l’IA.\n**Animation :** Kilch Steed EYEGHE, chef de projet chez 893°, et Narcisse N’OUEMOU, consultant en Learning IA.",
     role: "Co-animation et contribution à la conception du support avec Narcisse N’OUEMOU au sein de l’agence 893°.",
     next: "Trois médias sélectionnés sont présentés ; le support complet n’est pas publié."
   },
@@ -246,12 +246,29 @@ const dialogDescription = document.querySelector("#dialog-description");
 const dialogRole = document.querySelector("#dialog-role");
 const dialogNext = document.querySelector("#dialog-next");
 
+function renderRichText(element, source) {
+  element.replaceChildren();
+  String(source).split("\n").forEach((line, lineIndex) => {
+    if (lineIndex > 0) element.appendChild(document.createElement("br"));
+    line.split(/(\\*\\*[^*]+\\*\\*)/g).forEach((part) => {
+      if (!part) return;
+      if (part.startsWith("**") && part.endsWith("**")) {
+        const strong = document.createElement("strong");
+        strong.textContent = part.slice(2, -2);
+        element.appendChild(strong);
+      } else {
+        element.appendChild(document.createTextNode(part));
+      }
+    });
+  });
+}
+
 document.querySelectorAll("[data-project]").forEach((button) => {
   button.addEventListener("click", () => {
     const project = projectContent[button.dataset.project];
     if (!project || !dialog) return;
     dialogTitle.textContent = project.title;
-    dialogDescription.textContent = project.description;
+    renderRichText(dialogDescription, project.description);
     dialogRole.textContent = project.role;
     dialogNext.textContent = project.next;
     dialog.showModal();
