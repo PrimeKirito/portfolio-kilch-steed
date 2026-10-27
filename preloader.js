@@ -1,13 +1,6 @@
 (() => {
   const motionPreference = window.matchMedia?.("(prefers-reduced-motion: reduce)");
-  if (motionPreference?.matches || window.location.hash) return;
-
-  try {
-    if (window.sessionStorage.getItem("ks-entry-loader-seen")) return;
-    window.sessionStorage.setItem("ks-entry-loader-seen", "1");
-  } catch {
-    // Continue without session persistence when storage is unavailable.
-  }
+  if (motionPreference?.matches) return;
 
   const root = document.documentElement;
   root.classList.add("is-loading");
