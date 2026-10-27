@@ -519,3 +519,54 @@ if (reducedMotion.addEventListener) {
     });
   });
 }
+
+
+// Cloudflare Web Analytics stays inert until the visitor explicitly opts in.
+const analyticsStorageKey="portfolio-analytics-choice";
+const analyticsPanel=document.querySelector("#analytics-choice");
+const analyticsTemplate=document.querySelector("#cloudflare-analytics-template");
+function getAnalyticsChoice(){
+  try{return localStorage.getItem(analyticsStorageKey)}catch(_){return null}
+}
+function loadCloudflareAnalytics(force=false){
+  if((!force&&getAnalyticsChoice()!=="accepted")||document.querySelector("[data-cf-beacon]"))return;
+  const source=analyticsTemplate?.content.querySelector("script");
+  if(!source)return;
+  const beacon=document.createElement("script");beacon.type=source.type;beacon.src=source.src;
+  beacon.setAttribute("data-cf-beacon",source.getAttribute("data-cf-beacon"));document.head.append(beacon);
+}
+function showAnalyticsPreferences(focusFirst=true){
+  if(!analyticsPanel)return;
+  analyticsPanel.hidden=false;
+  if(focusFirst)analyticsPanel.querySelector("[data-analytics-choice='refused']")?.focus();
+}
+window.showAnalyticsPreferences=showAnalyticsPreferences;
+const analyticsChoice=getAnalyticsChoice();
+if(analyticsChoice==="accepted")loadCloudflareAnalytics();
+if(window.location.hash==="#privacy-preferences")showAnalyticsPreferences();
+else if(analyticsChoice!=="accepted"&&analyticsChoice!=="refused")showAnalyticsPreferences(false);
+document.querySelectorAll("[data-open-analytics-preferences]").forEach(button=>button.addEventListener("click",()=>showAnalyticsPreferences()));
+document.querySelectorAll("[data-analytics-choice]").forEach(button=>button.addEventListener("click",()=>{
+  const choice=button.dataset.analyticsChoice;
+  try{localStorage.setItem(analyticsStorageKey,choice)}catch(_){}
+  analyticsPanel.hidden=true;
+  if(choice==="accepted")loadCloudflareAnalytics(true);
+}));
+
+// Reveal large headings as they enter view, with a visible fallback for reduced motion.
+const largeHeadings=[...document.querySelectorAll(".hero h1,main h2,.project-dialog h2")];
+if("IntersectionObserver" in window&&!reducedMotion.matches){
+  document.documentElement.classList.add("motion-ready");
+  const headingObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
+    if(entry.isIntersecting){entry.target.classList.add("is-visible");headingObserver.unobserve(entry.target)}
+  }),{threshold:.12,rootMargin:"0px 0px -6% 0px"});
+  largeHeadings.forEach(heading=>headingObserver.observe(heading));
+}else largeHeadings.forEach(heading=>heading.classList.add("is-visible"));
+
+const nanoEntry=document.querySelector("[data-nano-entry]");
+const nanoCard=document.querySelector("#projet-nano");
+if(nanoEntry&&nanoCard)nanoEntry.addEventListener("click",()=>{
+  nanoCard.classList.remove("is-arriving");
+  requestAnimationFrame(()=>nanoCard.classList.add("is-arriving"));
+  window.setTimeout(()=>nanoCard.classList.remove("is-arriving"),reducedMotion.matches?0:1400);
+});
