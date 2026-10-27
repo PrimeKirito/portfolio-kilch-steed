@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f4f0e8">
   <meta name="description" content="Portfolio de Kilch Steed EYEGHE : gestion de projet numérique, direction artistique, design et communication digitale.">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; form-action 'self' mailto:; object-src 'none'; frame-src 'none'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; upgrade-insecure-requests">
   <title>Kilch Steed EYEGHE — Portfolio</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css?v=portfolio-refinements-20261023">
-  <script src="script.js?v=project-descriptions-20261023" defer></script>
+  <script src="script.js?v=privacy-motion-20261027" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#contenu">Aller au contenu</a>
@@ -38,6 +40,7 @@
           <div class="hero-mark" aria-hidden="true"><span>K</span><span>S</span><span>E</span><i></i></div>
           <p>Stratégie, coordination et création. Je donne une direction aux idées et une forme aux projets numériques.</p>
           <a class="text-link" href="#projets">Explorer les projets <span class="animated-icon" data-animation="arrow-down-right" aria-hidden="true">↘</span></a>
+          <a class="project-entry-link" href="#projet-nano" data-nano-entry>NaNo Ring <span>Découvrir le projet phare</span><i aria-hidden="true">↘</i></a>
         </div>
       </div>
       <div class="hero-foot"><span>INDÉPENDANT DANS L'APPROCHE, COLLECTIF DANS L'ACTION.</span><span>ÎLE-DE-FRANCE · OUVERT AUX OPPORTUNITÉS</span></div>
@@ -101,7 +104,7 @@
             <span class="project-meta"><span><strong>Plaine Commune</strong><small>Production éditoriale · Mise en page</small></span><span class="project-year">ÉDITION</span></span>
           </button>
         </article>
-        <article class="project-card" data-category="strategie">
+        <article class="project-card project-card--nano" id="projet-nano" tabindex="-1" data-category="strategie">
           <div class="project-gallery" data-gallery="nano" role="region" aria-label="Galerie du projet NaNo Ring">
             <div class="project-image">
               <img class="gallery-image" src="assets/NaNo%20App01.png" alt="NaNo Ring — média de présentation du projet, visuel 1" loading="lazy" decoding="async">
@@ -295,11 +298,23 @@
     <section class="contact section-wrap" id="contact"><p class="section-kicker">06 / ET MAINTENANT ?</p><div class="contact-grid"><h2>Une idée<br>à faire <span class="serif-italic">grandir</span> ?</h2><div class="contact-detail"><p>Je recherche une première opportunité en CDI ou CDD en gestion de projet numérique, innovation et communication digitale.</p><a class="contact-link" href="mailto:kelchsteed@gmail.com">Écrire un message <span aria-hidden="true">↗</span></a><p class="contact-note">Contact professionnel : kelchsteed@gmail.com</p></div></div><div class="contact-bottom"><span>KILCH STEED EYEGHE</span><span>GESTION DE PROJET · DESIGN · NUMÉRIQUE</span><a href="#accueil">RETOUR EN HAUT ↑</a></div></section>
   </main>
 
-  <footer class="site-footer"><span>© <span id="current-year">2026</span> KILCH STEED EYEGHE</span><span>CONÇU AVEC INTENTION. PUBLIÉ INDÉPENDAMMENT.</span><span>PORTFOLIO PERSONNEL</span></footer>
+  <footer class="site-footer"><span>© <span id="current-year">2026</span> KILCH STEED EYEGHE</span><span>CONÇU AVEC INTENTION. PUBLIÉ INDÉPENDAMMENT.</span><span>PORTFOLIO PERSONNEL · <a href="confidentialite.html">CONFIDENTIALITÉ</a> · <button class="privacy-settings" type="button" data-open-analytics-preferences>PRÉFÉRENCES ANALYTICS</button></span></footer>
 
   <dialog class="project-dialog" aria-labelledby="dialog-title"><form method="dialog"><button class="dialog-close" aria-label="Fermer la fiche projet">Fermer <span aria-hidden="true">×</span></button></form><p class="section-kicker" id="dialog-kicker">PROJET SÉLECTIONNÉ</p><h2 id="dialog-title">Projet</h2><p id="dialog-description"></p><div class="dialog-details"><div><span>CONTRIBUTION</span><p id="dialog-role"></p></div><div><span>À COMPLÉTER</span><p id="dialog-next"></p></div></div></dialog>
-  <!-- Cloudflare Web Analytics -->
-  <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "833e4f7444054342a00efdbbfb95b186"}'></script>
-  <!-- End Cloudflare Web Analytics -->
+  <aside class="analytics-choice" id="analytics-choice" role="region" aria-labelledby="analytics-choice-title" hidden>
+    <div class="analytics-choice-copy">
+      <strong id="analytics-choice-title">Mesure d’audience</strong>
+      <p>Le script Cloudflare mesure la fréquentation et les performances. Il reste désactivé tant que vous n’avez pas choisi. <a href="confidentialite.html">En savoir plus</a>.</p>
+    </div>
+    <div class="analytics-choice-actions">
+      <button type="button" data-analytics-choice="refused">Tout refuser</button>
+      <button type="button" data-analytics-choice="accepted">Autoriser la mesure</button>
+    </div>
+  </aside>
+  <template id="cloudflare-analytics-template">
+    <!-- Cloudflare Web Analytics -->
+    <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "833e4f7444054342a00efdbbfb95b186"}'></script>
+    <!-- End Cloudflare Web Analytics -->
+  </template>
 </body>
 </html>
