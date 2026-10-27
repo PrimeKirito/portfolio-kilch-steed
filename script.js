@@ -557,6 +557,7 @@ document.querySelectorAll("[data-analytics-choice]").forEach(button=>button.addE
 const largeHeadings=[...document.querySelectorAll(".hero h1,main h2,.project-dialog h2")];
 if("IntersectionObserver" in window&&!reducedMotion.matches){
   document.documentElement.classList.add("motion-ready");
+  largeHeadings[0]?.classList.add("is-visible");
   const headingObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
     if(entry.isIntersecting){entry.target.classList.add("is-visible");headingObserver.unobserve(entry.target)}
   }),{threshold:.12,rootMargin:"0px 0px -6% 0px"});
