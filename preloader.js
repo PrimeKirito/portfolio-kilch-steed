@@ -24,14 +24,14 @@
     pageElements.forEach(({ element }) => { element.inert = true; });
 
     const beganAt = performance.now();
-    const minimumDuration = 850;
+    const minimumDuration = 1600;
     let ready = document.readyState === "complete";
     let progress = 0;
     let finished = false;
 
     const renderProgress = (value) => {
       progress = Math.max(progress, Math.min(100, Math.floor(value)));
-      if (number) number.textContent = String(progress).padStart(2, "0");
+      if (number) number.textContent = String(progress);
       if (fill) fill.style.transform = `scaleX(${progress / 100})`;
       if (progressbar) progressbar.setAttribute("aria-valuenow", String(progress));
     };
@@ -57,8 +57,8 @@
     const animate = (now) => {
       if (finished) return;
       const elapsed = now - beganAt;
-      const eased = 94 * (1 - Math.exp(-elapsed / 760));
-      renderProgress(ready ? Math.min(99, eased) : Math.min(92, eased));
+      const eased = Math.min(92, (elapsed / minimumDuration) * 92);
+      renderProgress(eased);
       finish();
       if (!finished) window.requestAnimationFrame(animate);
     };
