@@ -563,6 +563,20 @@ if("IntersectionObserver" in window&&!reducedMotion.matches){
   largeHeadings.forEach(heading=>headingObserver.observe(heading));
 }else largeHeadings.forEach(heading=>heading.classList.add("is-visible"));
 
+const projectCollage=document.querySelector(".project-collage");
+if(projectCollage){
+  if("IntersectionObserver" in window&&!reducedMotion.matches){
+    projectCollage.classList.add("has-entrance");
+    const collageObserver=new IntersectionObserver(entries=>{
+      if(entries.some(entry=>entry.isIntersecting)){
+        projectCollage.classList.add("is-visible");
+        collageObserver.disconnect();
+      }
+    },{threshold:.16});
+    collageObserver.observe(projectCollage);
+  }else projectCollage.classList.add("is-visible");
+}
+
 const nanoEntry=document.querySelector("[data-nano-entry]");
 const nanoCard=document.querySelector("#projet-nano");
 if(nanoEntry&&nanoCard)nanoEntry.addEventListener("click",()=>{
