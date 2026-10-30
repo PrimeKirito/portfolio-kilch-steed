@@ -240,7 +240,7 @@ if (menuToggle && navigation) {
   });
 }
 
-const dialog = document.querySelector(".project-dialog");
+const dialog = document.querySelector(".project-dialog:not(.case-study)");
 const dialogTitle = document.querySelector("#dialog-title");
 const dialogDescription = document.querySelector("#dialog-description");
 const dialogRole = document.querySelector("#dialog-role");
@@ -248,9 +248,9 @@ const dialogNext = document.querySelector("#dialog-next");
 
 function renderRichText(element, source) {
   element.replaceChildren();
-  String(source).split("\n").forEach((line, lineIndex) => {
+  String(source).split("\\n").forEach((line, lineIndex) => {
     if (lineIndex > 0) element.appendChild(document.createElement("br"));
-    line.split(/(\*\*[^*]+\*\*)/g).forEach((part) => {
+    line.split(/(\\*\\*[^*]+\\*\\*)/g).forEach((part) => {
       if (!part) return;
       if (part.startsWith("**") && part.endsWith("**")) {
         const strong = document.createElement("strong");
@@ -265,8 +265,19 @@ function renderRichText(element, source) {
 
 document.querySelectorAll("[data-project]").forEach((button) => {
   button.addEventListener("click", () => {
+    const caseStudyId = button.dataset.project === "nano"
+      ? "dialog-nano"
+      : button.dataset.project === "codev"
+        ? "dialog-codev"
+        : null;
+    const caseStudy = caseStudyId ? document.getElementById(caseStudyId) : null;
+    if (caseStudy) {
+      caseStudy.showModal();
+      return;
+    }
+
     const project = projectContent[button.dataset.project];
-    if (!project || !dialog) return;
+    if (!project || !dialog || !dialogTitle || !dialogDescription || !dialogRole || !dialogNext) return;
     dialogTitle.textContent = project.title;
     renderRichText(dialogDescription, project.description);
     dialogRole.textContent = project.role;
@@ -275,12 +286,10 @@ document.querySelectorAll("[data-project]").forEach((button) => {
   });
 });
 
-document.querySelector(".dialog-close")?.addEventListener("click", () => {
-  dialog?.close();
-});
-
-dialog?.addEventListener("click", (event) => {
-  if (event.target === dialog) dialog.close();
+document.querySelectorAll("dialog.project-dialog").forEach((projectDialog) => {
+  projectDialog.addEventListener("click", (event) => {
+    if (event.target === projectDialog) projectDialog.close();
+  });
 });
 
 const currentYear = document.querySelector("#current-year");
