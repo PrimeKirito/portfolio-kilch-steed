@@ -463,19 +463,30 @@ button:hover i.fi-bs-arrow-up-right{
 
 /* ACCROCHE DE LA SECTION PROJETS */
 .stage-intro {
-  max-width: 440px;
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: 4vw;
+  width: min(280px, 20vw);
+  max-width: 280px;
+  transform: translateY(-50%);
 }
 
 .project-accroche {
-  font-family: 'Poppins', sans-serif;
-  font-size: clamp(1.35rem, 2.2vw, 1.85rem);
-  font-weight: 700;
-  line-height: 1.35;
-  color: #FFFFFF;
+  font-family: var(--sans);
+  font-size: clamp(0.95rem, 1.25vw, 1.15rem);
+  font-weight: 500;
+  line-height: 1.45;
+  color: #E5E5E5;
   letter-spacing: -0.01em;
-  max-width: 440px;
-  margin-top: 0.5rem;
-  margin-bottom: 1.5rem;
+  max-width: 280px;
+  margin: 0;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+
+.project-accroche:hover {
+  opacity: 1;
 }
 
 @media (max-width: 768px) {
@@ -484,12 +495,18 @@ button:hover i.fi-bs-arrow-up-right{
   }
 
   .stage-intro {
-    display: block;
+    position: relative;
+    top: auto;
+    left: auto;
+    width: auto;
+    max-width: none;
+    margin: 1.5rem 5vw 0;
+    transform: none;
   }
 
   .project-accroche {
-    max-width: min(440px, 100%);
-    font-size: clamp(1.25rem, 4vw, 1.55rem);
+    max-width: 100%;
+    font-size: 1rem;
   }
 }
 
