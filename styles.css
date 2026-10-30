@@ -131,10 +131,10 @@
 }
 
 
-/* Explicit visual order for the project grid (same order on every viewport) */
-.project-grid .project-card:has([data-gallery="codev"]){order:1}
-.project-grid .project-card:has([data-gallery="plaine"]){order:2}
-.project-grid .project-card:has([data-gallery="nano"]){order:3}
+/* NaNo Ring leads the portfolio project sequence; every existing card remains. */
+.project-grid .project-card:has([data-gallery="nano"]){order:1}
+.project-grid .project-card:has([data-gallery="codev"]){order:2}
+.project-grid .project-card:has([data-gallery="plaine"]){order:3}
 .project-grid .project-card:has([data-gallery="lundi"]){order:4}
 .project-grid .project-card:has([data-gallery="sacerdoce"]){order:5}
 .project-grid .project-card:has([data-gallery="agency"]){order:6}
@@ -167,4 +167,109 @@
 .gallery-control:hover .animated-icon,.gallery-control:focus-visible .animated-icon{color:#fff}
 @media(prefers-reduced-motion:reduce){
   .animated-icon .useanimation-svg animateTransform{display:none}
+}
+
+
+/* Progressive title reveals. Text remains visible if motion is reduced or JS is unavailable. */
+html.motion-ready h1,html.motion-ready h2{opacity:0;transform:translateY(1.15rem);transition:opacity .72s ease,transform .72s cubic-bezier(.2,.72,.2,1)}
+html.motion-ready h1.is-visible,html.motion-ready h2.is-visible{opacity:1;transform:translateY(0)}
+html.motion-ready .hero-title-line-inner{animation:none;opacity:1;transform:none;filter:none}
+.project-card--nano{scroll-margin-top:1.5rem}
+.project-card--nano:target .project-image,.project-card--nano.is-arriving .project-image{animation:nanoArrival 1.35s ease-out}
+@keyframes nanoArrival{0%{box-shadow:inset 0 0 0 0 rgba(49,85,232,0)}30%{box-shadow:inset 0 0 0 6px rgba(49,85,232,.85)}100%{box-shadow:inset 0 0 0 0 rgba(49,85,232,0)}}
+.project-entry-link{display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-top:1.3rem;padding:1rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:.84rem;font-weight:700}
+.project-entry-link span{font:.58rem var(--mono);color:var(--muted);margin-left:auto}
+.project-entry-link i{font-style:normal;color:var(--blue);font-size:1.2rem;transition:transform .25s}
+.project-entry-link:hover i,.project-entry-link:focus-visible i{transform:translate(3px,3px)}
+.privacy-settings{background:none;color:inherit;border:0;border-bottom:1px solid currentColor;padding:0;font:inherit;cursor:pointer}
+.analytics-choice[hidden]{display:none!important}
+.analytics-choice{position:fixed;z-index:20;left:1rem;right:1rem;bottom:1rem;max-width:900px;margin:auto;padding:1.1rem 1.3rem;background:var(--paper);color:var(--ink);border:1px solid var(--line);box-shadow:0 12px 40px rgba(0,0,0,.22);display:flex;align-items:center;justify-content:space-between;gap:1.5rem}
+.analytics-choice-copy{max-width:560px}.analytics-choice-copy strong{font-size:.9rem}
+.analytics-choice-copy p{font-size:.72rem;line-height:1.55;margin:.4rem 0 0;color:var(--muted)}
+.analytics-choice-copy a{color:var(--blue);text-decoration:underline}
+.analytics-choice-actions{display:flex;gap:.55rem;flex-wrap:wrap}
+.analytics-choice-actions button{border:1px solid var(--ink);background:transparent;padding:.7rem .85rem;font:.62rem var(--mono);cursor:pointer}
+.analytics-choice-actions button:last-child{background:var(--blue);border-color:var(--blue);color:#fff}
+@media(max-width:600px){.project-entry-link{flex-wrap:wrap}.project-entry-link span{order:2;margin-left:0;width:calc(100% - 2rem)}.project-entry-link i{order:1}.analytics-choice{left:.5rem;right:.5rem;bottom:.5rem;display:block;padding:1rem}.analytics-choice-actions{margin-top:.8rem}.analytics-choice-actions button{flex:1;min-width:8rem}}
+@media(prefers-reduced-motion:reduce){html.motion-ready h1,html.motion-ready h2{opacity:1!important;transform:none!important;transition:none!important}.project-card--nano:target .project-image,.project-card--nano.is-arriving .project-image{animation:none!important}}
+
+
+/* Compact legal information page, using the portfolio's existing type and colors. */
+.privacy-page{max-width:980px;padding-top:clamp(4rem,8vw,7rem);padding-bottom:6rem}
+.privacy-page>.section-kicker{margin-bottom:2rem}
+.privacy-page>h1{font-size:clamp(4rem,10vw,8rem);line-height:.86;letter-spacing:-.09em;font-weight:600;margin:0 0 2rem}
+.privacy-page>h1 span{color:var(--blue)}
+.privacy-lead{max-width:660px;font-size:1.15rem;line-height:1.7;margin:0 0 4.5rem}
+.privacy-page section{max-width:680px;border-top:1px solid var(--line);padding:1.5rem 0 1.8rem}
+.privacy-page section h2{font-size:1.5rem;letter-spacing:-.05em;margin:0 0 1rem}
+.privacy-page section p{font-size:.91rem;line-height:1.75;color:#51524d;margin:.7rem 0}
+.privacy-page section a:not(.privacy-action){color:var(--blue);text-decoration:underline;text-underline-offset:3px}
+.privacy-action{display:inline-flex;gap:2rem;align-items:center;margin-top:1rem;padding:.85rem 0;border-bottom:1px solid var(--ink);font-weight:700;font-size:.82rem}
+.privacy-action span{color:var(--blue);font-size:1.1rem}
+.privacy-updated{font: .62rem var(--mono);color:var(--muted);margin-top:2rem}
+.privacy-footer{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;border-top:1px solid var(--line);padding:1.2rem var(--pad);font: .6rem var(--mono);text-transform:uppercase}
+.privacy-footer a:first-child{font:600 1rem var(--sans);letter-spacing:-.04em;text-transform:none}
+.privacy-footer a:last-child{border-bottom:1px solid currentColor}
+@media(max-width:600px){.privacy-page{padding-top:3.5rem}.privacy-page>h1{font-size:clamp(4.2rem,18vw,6rem)}.privacy-lead{font-size:1rem;margin-bottom:3rem}.privacy-footer{font-size:.52rem}}
+\n
+/* Cream-and-blue entry sequence */
+.entry-loader[hidden]{display:none!important}
+html.is-loading{overflow:hidden}
+.entry-loader{position:fixed;inset:0;z-index:2000;display:grid;background:#080808;color:var(--paper);overflow:hidden}
+.entry-loader::before,.entry-loader::after{content:"";position:absolute;left:0;right:0;height:50%;background:#080808;z-index:0;transition:transform .65s cubic-bezier(.76,0,.24,1)}
+.entry-loader::before{top:0}
+.entry-loader::after{bottom:0}
+.entry-loader__top{position:absolute;top:1.25rem;left:var(--pad);right:var(--pad);z-index:1;display:flex;justify-content:space-between;gap:1rem;font: .62rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--paper);transition:opacity .18s ease}
+.entry-loader__center{position:absolute;top:50%;left:0;width:100%;z-index:1;display:flex;flex-direction:column;align-items:center;transform:translateY(-50%);transition:opacity .18s ease}
+.entry-loader__track{width:100vw;height:2px;margin:0;background:transparent;overflow:hidden}
+.entry-loader__track span{display:block;width:100%;height:100%;background:var(--blue);transform:scaleX(0);transform-origin:left center}
+.entry-loader__count{display:flex;gap:.08em;margin-top:1.05rem;color:var(--paper);font: .8rem/1 var(--mono);letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.entry-loader__percent{color:var(--blue)}
+.entry-loader__status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.entry-loader.is-complete .entry-loader__top,.entry-loader.is-complete .entry-loader__center{opacity:0}
+.entry-loader.is-leaving{background:transparent}
+.entry-loader.is-leaving::before{transform:translateY(-100%)}
+.entry-loader.is-leaving::after{transform:translateY(100%)}
+@media(max-width:600px){.entry-loader__top{top:1rem;left:1.2rem;right:1.2rem;font-size:.5rem;letter-spacing:.06em}.entry-loader__top span:last-child{max-width:45%;text-align:right}}
+@media(prefers-reduced-motion:reduce){.entry-loader{display:none!important}.entry-loader::before,.entry-loader::after{transition:none}}
+
+/* Editorial project collage */
+.project-collage-hint{display:none}
+.project-collage{position:relative;display:block;width:min(100%,1020px);min-height:700px;margin:2.5rem auto 1.5rem;background-image:linear-gradient(to right,rgba(23,24,22,.09) 1px,transparent 1px);background-size:25% 100%;background-position:center top;isolation:isolate}
+.project-collage .project-card{--card-x:50%;--card-y:25%;--card-rotation:0deg;--card-layer:1;--card-order:0;position:absolute;left:var(--card-x);top:var(--card-y);z-index:var(--card-layer);width:clamp(13rem,22vw,17rem);margin:0;padding:.55rem .55rem .85rem;background:#fbfaf6;border:1px solid #aaa79e;box-shadow:0 1rem 2rem rgba(23,24,22,.14);transform:translate(-50%,0) rotate(var(--card-rotation));opacity:1;transition:transform .7s cubic-bezier(.2,.72,.2,1),opacity .55s ease,box-shadow .3s ease;transition-delay:calc(var(--card-order)*55ms)}
+.project-collage.has-entrance .project-card{opacity:0;transform:translate(-50%,1.8rem) rotate(calc(var(--card-rotation) - 7deg)) scale(.94)}
+.project-collage.is-visible .project-card{opacity:1;transform:translate(-50%,0) rotate(var(--card-rotation)) scale(1)}
+.project-collage .project-card:nth-child(1){--card-x:33%;--card-y:13%;--card-rotation:-7deg;--card-layer:2;--card-order:0}
+.project-collage .project-card:nth-child(2){--card-x:51%;--card-y:8%;--card-rotation:-3deg;--card-layer:4;--card-order:1}
+.project-collage .project-card:nth-child(3){--card-x:66%;--card-y:23%;--card-rotation:5deg;--card-layer:9;--card-order:2}
+.project-collage .project-card:nth-child(4){--card-x:35%;--card-y:34%;--card-rotation:3deg;--card-layer:5;--card-order:3}
+.project-collage .project-card:nth-child(5){--card-x:52%;--card-y:48%;--card-rotation:-4deg;--card-layer:8;--card-order:4}
+.project-collage .project-card:nth-child(6){--card-x:69%;--card-y:47%;--card-rotation:6deg;--card-layer:6;--card-order:5}
+.project-collage .project-card:nth-child(7){--card-x:22%;--card-y:31%;--card-rotation:-5deg;--card-layer:7;--card-order:6}
+.project-collage .project-card:nth-child(8){--card-x:78%;--card-y:41%;--card-rotation:2deg;--card-layer:3;--card-order:7}
+.project-collage .project-card:nth-child(9){--card-x:46%;--card-y:21%;--card-rotation:8deg;--card-layer:1;--card-order:8}
+.project-collage .project-card:hover,.project-collage .project-card:focus-within{z-index:30!important;transform:translate(-50%,-.7rem) rotate(0deg) scale(1.045);box-shadow:0 1.8rem 3rem rgba(23,24,22,.22)}
+.project-collage .project-gallery{margin:0 0 .55rem}
+.project-collage .project-gallery .project-image{aspect-ratio:.96;background:#e8e4dc}
+.project-collage .project-gallery .project-image img{object-fit:contain}
+.project-collage .image-index{top:auto;bottom:.65rem;left:.65rem;background:var(--paper);padding:.45rem .55rem;font-size:.5rem}
+.project-collage .gallery-controls{right:.65rem;bottom:.65rem;left:.65rem}
+.project-collage .gallery-counter,.project-collage .gallery-control{background:#fbfaf6}
+.project-collage .project-open .project-meta{padding-top:.15rem}
+.project-collage .project-meta strong{font-size:1rem}
+.project-collage .project-meta small{font-size:.66rem;line-height:1.35}
+.project-collage .project-year{font-size:.48rem;white-space:nowrap}
+.project-collage .project-year::before{content:"NO. ";color:var(--muted);letter-spacing:.04em}
+.project-card[hidden]{display:none}
+@media(max-width:760px){
+  .project-collage-hint{display:flex;justify-content:flex-end;gap:.5rem;margin:0 0 .4rem;color:var(--muted);font: .58rem var(--mono)}
+  .project-collage{display:flex;align-items:flex-start;gap:1rem;width:auto;min-height:0;margin:1.35rem calc(var(--pad)*-1) 1.5rem;padding:.8rem var(--pad) 2.2rem;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:thin;background:none}
+  .project-collage .project-card{position:relative;left:auto;top:auto;flex:0 0 min(76vw,17rem);width:min(76vw,17rem);transform:rotate(var(--card-rotation));scroll-snap-align:center}
+  .project-collage.has-entrance .project-card{opacity:0;transform:translateY(1.5rem) rotate(calc(var(--card-rotation) - 7deg)) scale(.94)}
+  .project-collage.is-visible .project-card{opacity:1;transform:rotate(var(--card-rotation)) scale(1)}
+  .project-collage .project-card:hover,.project-collage .project-card:focus-within{transform:translateY(-.35rem) rotate(0deg) scale(1.01)}
+}
+@media(prefers-reduced-motion:reduce){
+  .project-collage.has-entrance .project-card{opacity:1!important;transform:rotate(var(--card-rotation))!important;transition:none!important}
+  .project-collage .project-card:hover,.project-collage .project-card:focus-within{transform:rotate(0deg)!important}
 }
