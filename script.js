@@ -59,7 +59,7 @@ const dialog = document.querySelector('.project-dialog');
 let currentProjectIndex = 0;
 
 function openProject(key) {
-  if (key === 'nano' || key === 'codev') {
+  if (['nano', 'codev', 'scuio', 'plaine', 'lundi'].includes(key)) {
     document.getElementById('dialog-' + key)?.showModal();
     return;
   }
@@ -142,6 +142,66 @@ if (copyBtn && copyText) {
       copyText.textContent = 'Copie indisponible';
     }
   });
+}
+
+
+const hoverGalleries = {
+  nano: ['NaNo App01.png','NaNo App02.png','NaNo App03.png','NaNo App04.png','NaNo App06.png','NaNo App07.png','NaNo App08.png'],
+  codev: ['codev-grand-paris01.png','codev-grand-paris02.png','codev-grand-paris03.png','codev-grand-paris04.png'],
+  plaine: ['plaine-commune01.png','plaine-commune02.png'],
+  scuio: ['guide-scuio-ip01.png','guide-scuio-ip02.png'],
+  lundi: ['atelier-lundi-pro01.PNG','atelier-lundi-pro02.PNG','atelier-lundi-pro03.PNG'],
+  sacerdoce: ['sacerdoce-royal01.png','sacerdoce-royal02.png','sacerdoce-royal03.png','sacerdoce-royal04.png','sacerdoce-royal05.png','sacerdoce-royal06.png'],
+  magik: ['magik-optik01.png','magik-optik02.png'],
+  agency: ['893° 01.png','893 °.png','893 ° 02.png','893 ° 03.png','893 ° 04.png'],
+  autres: ['Autres01.png','Autres02.png','Autres03.png']
+};
+const encodeAsset = name => 'assets/' + encodeURIComponent(name).replace(/%2F/gi, '/');
+slides.forEach(slide => {
+  const gallery = hoverGalleries[slide.dataset.project] || [];
+  const image = slide.querySelector('img');
+  if (gallery.length < 2 || !image) return;
+  const counter = document.createElement('span');
+  counter.className = 'slide-gallery-count';
+  counter.setAttribute('aria-hidden', 'true');
+  counter.textContent = '01 / ' + String(gallery.length).padStart(2, '0');
+  slide.append(counter);
+  let chosen = 0;
+  const selectFrame = event => {
+    if (event.pointerType !== 'mouse' || event.target.closest('button')) return;
+    const rect = slide.getBoundingClientRect();
+    const ratio = Math.min(0.999, Math.max(0, (event.clientX - rect.left) / rect.width));
+    const next = Math.min(gallery.length - 1, Math.floor(ratio * gallery.length));
+    if (next === chosen) return;
+    chosen = next;
+    image.src = encodeAsset(gallery[chosen]);
+    image.alt = slide.getAttribute('aria-label').replace(/^Projet \d+ sur \d+ : /, '') + ' — visuel ' + (chosen + 1) + ' sur ' + gallery.length;
+    counter.textContent = String(chosen + 1).padStart(2, '0') + ' / ' + String(gallery.length).padStart(2, '0');
+  };
+  slide.addEventListener('pointermove', selectFrame);
+  slide.addEventListener('pointerleave', () => {
+    if (chosen === 0) return;
+    chosen = 0;
+    image.src = encodeAsset(gallery[0]);
+    image.alt = slide.getAttribute('aria-label').replace(/^Projet \d+ sur \d+ : /, '') + ' — visuel 1 sur ' + gallery.length;
+    counter.textContent = '01 / ' + String(gallery.length).padStart(2, '0');
+  });
+});
+
+const titleSelector = '.stage-intro h1, .slide-copy h2, .about-heading h2, .experience-heading h2, .contact-content h2, .animated-title';
+if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const titles = Array.from(document.querySelectorAll(titleSelector));
+  titles.forEach(title => title.classList.add('title-reveal'));
+  document.documentElement.classList.add('has-title-reveal');
+  const titleObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        titleObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.18 });
+  titles.forEach(title => titleObserver.observe(title));
 }
 
 setActiveSlide(0);
