@@ -135,7 +135,7 @@ if (copyBtn && copyText) {
       copyText.textContent = 'Adresse copiée !';
       copyBtn.classList.add('is-copied');
       window.setTimeout(() => {
-        copyText.textContent = '📋';
+        copyText.textContent = '';
         copyBtn.classList.remove('is-copied');
       }, 2500);
     } catch (error) {
