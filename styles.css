@@ -351,3 +351,93 @@ button:hover i.fi-bs-arrow-up-right{
     transition:none !important;
   }
 }
+
+/* POSITIONNEMENT DES FLÈCHES SUR LES BORDS DE LA CARTE ACTIVE */
+.carousel-controls {
+  position: absolute;
+  z-index: 8;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  width: min(66vw, 940px);
+  height: 100%;
+  display: block;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  background: rgba(25, 25, 25, 0.75);
+  color: #fff;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transform: translateY(-50%);
+  pointer-events: auto;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.carousel-arrow[data-previous] {
+  left: 1.25rem;
+}
+
+.carousel-arrow[data-next] {
+  right: 1.25rem;
+}
+
+.carousel-arrow:hover {
+  background: rgba(0, 87, 255, 0.95);
+  border-color: #0057FF;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-arrow:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+.carousel-arrow svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+/* La largeur de la carte active change aux mêmes seuils responsive. */
+@media (max-width: 900px) {
+  .carousel-controls {
+    width: 76vw;
+  }
+
+  .carousel-arrow {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+@media (max-width: 600px) {
+  .carousel-controls {
+    width: 86vw;
+  }
+
+  .carousel-arrow {
+    width: 38px;
+    height: 38px;
+  }
+}
+
