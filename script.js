@@ -544,3 +544,43 @@ if(projectCollage){
     collageObserver.observe(projectCollage);
   }else projectCollage.classList.add("is-visible");
 }
+
+
+function initContactEmailCopy() {
+  const copyBtn = document.getElementById("copy-email-btn");
+  const copyText = document.getElementById("copy-text");
+  if (!copyBtn || !copyText) return;
+
+  let resetTimer;
+  copyBtn.addEventListener("click", async () => {
+    const email = copyBtn.getAttribute("data-email");
+    if (!email || !navigator.clipboard?.writeText) {
+      copyText.textContent = "Copie indisponible";
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(email);
+      copyBtn.style.borderColor = "#10B981";
+      copyText.textContent = "Adresse copiée !";
+      window.clearTimeout(resetTimer);
+      resetTimer = window.setTimeout(() => {
+        copyText.textContent = "📋";
+        copyBtn.style.borderColor = "";
+      }, 2500);
+    } catch (error) {
+      console.error("Échec de la copie :", error);
+      copyText.textContent = "Copie indisponible";
+      window.clearTimeout(resetTimer);
+      resetTimer = window.setTimeout(() => {
+        copyText.textContent = "📋";
+      }, 2500);
+    }
+  });
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initContactEmailCopy, { once: true });
+} else {
+  initContactEmailCopy();
+}
