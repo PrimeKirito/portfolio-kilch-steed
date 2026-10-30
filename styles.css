@@ -230,3 +230,145 @@ html.is-loading{overflow:hidden}
   .project-collage.has-entrance .project-card{opacity:1!important;transform:rotate(var(--card-rotation))!important;transition:none!important}
   .project-collage .project-card:hover,.project-collage .project-card:focus-within{transform:rotate(0deg)!important}
 }
+
+.case-study {
+  width: 95%;
+  max-width: 1100px;
+  max-height: 90vh;
+  margin: auto;
+  padding: 0;
+  border: none;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  color: #191919;
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+}
+
+.case-study::backdrop {
+  background-color: rgba(25, 25, 25, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.dialog-header-form {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid #EBEBEB;
+  z-index: 10;
+}
+
+.dialog-close {
+  background: none;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #757575;
+  transition: color 0.2s ease;
+}
+
+.dialog-close:hover {
+  color: #0057FF;
+}
+
+.dialog-close span {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.dialog-content-scroll {
+  padding: 2rem 1.5rem 4rem 1.5rem;
+  overflow-y: auto;
+  max-height: calc(90vh - 60px);
+}
+
+.cs-header {
+  margin-bottom: 3rem;
+}
+
+.cs-header h2 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.1;
+  margin: 0.5rem 0 1rem 0;
+  color: #191919;
+  letter-spacing: -0.02em;
+}
+
+.cs-subtitle {
+  font-size: 1.125rem;
+  color: #757575;
+  max-width: 700px;
+  line-height: 1.5;
+}
+
+.cs-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+}
+
+.cs-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  border-top: 2px solid #191919;
+  padding-top: 1.5rem;
+}
+
+.meta-block span {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #757575;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.meta-block p {
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin: 0;
+  color: #191919;
+}
+
+.cs-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.cs-section h3 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: #191919;
+}
+
+.cs-section p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #4a4a4a;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .dialog-content-scroll {
+    padding: 3rem 4rem 5rem 4rem;
+  }
+  .cs-grid {
+    grid-template-columns: 300px 1fr;
+    gap: 4rem;
+  }
+}
