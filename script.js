@@ -519,3 +519,19 @@ if (reducedMotion.addEventListener) {
     });
   });
 }
+
+
+// Reveal the layered project collage when it enters view.
+const projectCollage=document.querySelector(".project-collage");
+if(projectCollage){
+  if("IntersectionObserver" in window&&!reducedMotion.matches){
+    projectCollage.classList.add("has-entrance");
+    const collageObserver=new IntersectionObserver(entries=>{
+      if(entries.some(entry=>entry.isIntersecting)){
+        projectCollage.classList.add("is-visible");
+        collageObserver.disconnect();
+      }
+    },{threshold:.16});
+    collageObserver.observe(projectCollage);
+  }else projectCollage.classList.add("is-visible");
+}
