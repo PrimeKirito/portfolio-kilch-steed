@@ -248,9 +248,9 @@ const dialogNext = document.querySelector("#dialog-next");
 
 function renderRichText(element, source) {
   element.replaceChildren();
-  String(source).split("\\n").forEach((line, lineIndex) => {
+  String(source).split("\n").forEach((line, lineIndex) => {
     if (lineIndex > 0) element.appendChild(document.createElement("br"));
-    line.split(/(\\*\\*[^*]+\\*\\*)/g).forEach((part) => {
+    line.split(/(\*\*[^*]+\*\*)/g).forEach((part) => {
       if (!part) return;
       if (part.startsWith("**") && part.endsWith("**")) {
         const strong = document.createElement("strong");
