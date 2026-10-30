@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap');
 
 :root{--ink:#050505;--ink-soft:#111216;--cream:#f7f7f5;--paper:#141518;--blue:#416bff;--muted:#a5a6ad;--line:rgba(247,247,245,.18);--mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;--display:'Manrope',sans-serif;color-scheme:dark}
 *{box-sizing:border-box}
@@ -438,6 +438,58 @@ button:hover i.fi-bs-arrow-up-right{
   .carousel-arrow {
     width: 38px;
     height: 38px;
+  }
+}
+
+/* NOTE CENTRÉE DANS LE HEADER */
+.site-header {
+  /* Le header reste ancré en haut de la page comme dans la mise en page existante. */
+  position: absolute;
+}
+
+.header-note.centered-note {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a5a6ad;
+  white-space: nowrap;
+}
+
+/* ACCROCHE DE LA SECTION PROJETS */
+.stage-intro {
+  max-width: 440px;
+}
+
+.project-accroche {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+  font-weight: 700;
+  line-height: 1.35;
+  color: #FFFFFF;
+  letter-spacing: -0.01em;
+  max-width: 440px;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .header-note.centered-note {
+    display: none;
+  }
+
+  .stage-intro {
+    display: block;
+  }
+
+  .project-accroche {
+    max-width: min(440px, 100%);
+    font-size: clamp(1.25rem, 4vw, 1.55rem);
   }
 }
 
