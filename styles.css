@@ -461,52 +461,49 @@ button:hover i.fi-bs-arrow-up-right{
   white-space: nowrap;
 }
 
-/* ACCROCHE DE LA SECTION PROJETS */
+/* ACCROCHE DE LA SECTION PROJETS — POSITIONNEMENT AFFINÉ */
 .stage-intro {
-  position: absolute;
+  position: absolute !important;
   z-index: 3;
-  top: 50%;
-  left: 4vw;
-  width: min(280px, 20vw);
-  max-width: 280px;
-  transform: translateY(-50%);
+  top: 36.5% !important;
+  left: 4vw !important;
+  right: auto !important;
+  width: min(240px, 17vw) !important;
+  max-width: 240px !important;
+  transform: translateY(-50%) !important;
 }
 
 .project-accroche {
-  font-family: var(--sans);
-  font-size: clamp(0.95rem, 1.25vw, 1.15rem);
-  font-weight: 500;
-  line-height: 1.45;
-  color: #E5E5E5;
-  letter-spacing: -0.01em;
-  max-width: 280px;
-  margin: 0;
+  font-family: var(--sans) !important;
+  font-size: clamp(0.9rem, 1.05vw, 1rem) !important;
+  font-weight: 500 !important;
+  line-height: 1.45 !important;
+  color: #E5E5E5 !important;
+  letter-spacing: -0.01em !important;
+  max-width: 240px !important;
+  margin: 0 !important;
   opacity: 0.9;
   transition: opacity 0.3s ease;
 }
 
-.project-accroche:hover {
-  opacity: 1;
-}
+.project-accroche:hover { opacity: 1; }
 
 @media (max-width: 768px) {
-  .header-note.centered-note {
-    display: none;
-  }
+  .header-note.centered-note { display: none; }
 
   .stage-intro {
-    position: relative;
-    top: auto;
-    left: auto;
-    width: auto;
-    max-width: none;
-    margin: 1.5rem 5vw 0;
-    transform: none;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    width: auto !important;
+    max-width: none !important;
+    margin: 1.5rem 5vw 0 !important;
+    transform: none !important;
   }
 
   .project-accroche {
-    max-width: 100%;
-    font-size: 1rem;
+    max-width: 100% !important;
+    font-size: 1rem !important;
   }
 }
-
