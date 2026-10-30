@@ -215,15 +215,15 @@ html.motion-ready .hero-title-line-inner{animation:none;opacity:1;transform:none
 /* Cream-and-blue entry sequence */
 .entry-loader[hidden]{display:none!important}
 html.is-loading{overflow:hidden}
-.entry-loader{position:fixed;inset:0;z-index:2000;display:grid;background:var(--paper);color:var(--ink);overflow:hidden}
-.entry-loader::before,.entry-loader::after{content:"";position:absolute;left:0;right:0;height:50%;background:var(--paper);z-index:0;transition:transform .65s cubic-bezier(.76,0,.24,1)}
+.entry-loader{position:fixed;inset:0;z-index:2000;display:grid;background:#080808;color:var(--paper);overflow:hidden}
+.entry-loader::before,.entry-loader::after{content:"";position:absolute;left:0;right:0;height:50%;background:#080808;z-index:0;transition:transform .65s cubic-bezier(.76,0,.24,1)}
 .entry-loader::before{top:0}
 .entry-loader::after{bottom:0}
-.entry-loader__top{position:absolute;top:1.25rem;left:var(--pad);right:var(--pad);z-index:1;display:flex;justify-content:space-between;gap:1rem;font: .62rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink);transition:opacity .18s ease}
+.entry-loader__top{position:absolute;top:1.25rem;left:var(--pad);right:var(--pad);z-index:1;display:flex;justify-content:space-between;gap:1rem;font: .62rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--paper);transition:opacity .18s ease}
 .entry-loader__center{position:absolute;top:50%;left:0;width:100%;z-index:1;display:flex;flex-direction:column;align-items:center;transform:translateY(-50%);transition:opacity .18s ease}
 .entry-loader__track{width:100vw;height:2px;margin:0;background:transparent;overflow:hidden}
 .entry-loader__track span{display:block;width:100%;height:100%;background:var(--blue);transform:scaleX(0);transform-origin:left center}
-.entry-loader__count{display:flex;gap:.08em;margin-top:1.05rem;color:var(--ink);font: .8rem/1 var(--mono);letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.entry-loader__count{display:flex;gap:.08em;margin-top:1.05rem;color:var(--paper);font: .8rem/1 var(--mono);letter-spacing:.04em;font-variant-numeric:tabular-nums}
 .entry-loader__percent{color:var(--blue)}
 .entry-loader__status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .entry-loader.is-complete .entry-loader__top,.entry-loader.is-complete .entry-loader__center{opacity:0}
