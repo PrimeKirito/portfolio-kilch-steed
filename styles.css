@@ -37,8 +37,21 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offse
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
 
 /* Palette noire, blanche et bleue sur l’ensemble du portfolio. */
-.loader-track span{width:100%;transform:scaleX(0);transform-origin:left center}
-.loader-status{display:block;margin-top:11px;color:#aaa9ad;font:10px var(--mono);letter-spacing:.04em}
+.entry-loader[hidden]{display:none!important}
+html.is-loading{overflow:hidden}
+.entry-loader{position:fixed;inset:0;z-index:2000;display:grid;background:#050505;color:var(--cream);overflow:hidden}
+.entry-loader::before,.entry-loader::after{content:"";position:absolute;left:0;right:0;height:50%;background:#050505;z-index:0;transition:transform .65s cubic-bezier(.76,0,.24,1)}
+.entry-loader::before{top:0}.entry-loader::after{bottom:0}
+.entry-loader__top{position:absolute;top:1.25rem;left:4vw;right:4vw;z-index:1;display:flex;justify-content:space-between;gap:1rem;font:10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--cream);transition:opacity .18s ease}
+.entry-loader__center{position:absolute;top:50%;left:0;width:100%;z-index:1;display:flex;flex-direction:column;align-items:center;transform:translateY(-50%);transition:opacity .18s ease}
+.entry-loader__track{width:100vw;height:2px;margin:0;background:transparent;overflow:hidden}
+.entry-loader__track span{display:block;width:100%;height:100%;background:var(--blue);transform:scaleX(0);transform-origin:left center}
+.entry-loader__count{display:flex;gap:.08em;margin-top:1.05rem;color:var(--cream);font:12px/1 var(--mono);letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.entry-loader__percent{color:var(--blue)}
+.entry-loader__status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.entry-loader.is-complete .entry-loader__top,.entry-loader.is-complete .entry-loader__center{opacity:0}
+.entry-loader.is-leaving{opacity:1;visibility:visible;pointer-events:none;background:transparent}
+.entry-loader.is-leaving::before{transform:translateY(-100%)}.entry-loader.is-leaving::after{transform:translateY(100%)}
 .about-section{background:#050505;color:#f7f7f5}
 .about-section .section-topline,.about-details,.education-line{border-color:rgba(247,247,245,.2)}
 .about-section .section-topline p span,.experience-section .section-topline p span{color:#7f99ff}
