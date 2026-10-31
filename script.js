@@ -223,14 +223,16 @@ if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-mot
 setActiveSlide(0);
 
 /* --- CHOIX DE MESURE D'AUDIENCE : CHARGEMENT CONDITIONNEL CLOUDFLARE --- */
-document.addEventListener('DOMContentLoaded', () => {
-  const consentKey = 'cookie_consent_choice';
+const initializeCookieConsent = () => {
+  const consentKey = 'cookie_consent_choice_v2';
   const cookieBanner = document.getElementById('cookie-banner');
   const acceptBtn = document.getElementById('accept-cookies');
   const declineBtn = document.getElementById('decline-cookies');
   const manageBtn = document.getElementById('manage-cookies');
   const analyticsTemplate = document.getElementById('cloudflare-analytics-template');
   const entryLoader = document.querySelector('[data-entry-loader]');
+
+  if (!cookieBanner) return;
 
   const readChoice = () => {
     try {
@@ -249,8 +251,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  const closeBanner = () => cookieBanner?.classList.remove('is-active');
-  const openBanner = () => cookieBanner?.classList.add('is-active');
+  const closeBanner = () => {
+    cookieBanner.classList.remove('is-active');
+    cookieBanner.setAttribute('aria-hidden', 'true');
+  };
+
+  const openBanner = () => {
+    cookieBanner.classList.add('is-active');
+    cookieBanner.setAttribute('aria-hidden', 'false');
+  };
 
   const loadCloudflareAnalytics = () => {
     if (!analyticsTemplate || document.querySelector('[data-cloudflare-analytics-loaded]')) return;
@@ -267,39 +276,25 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(beacon);
   };
 
+  const loaderHasDisappeared = () => {
+    if (!entryLoader) return true;
+    return entryLoader.hidden ||
+      entryLoader.getAttribute('aria-hidden') === 'true' ||
+      window.getComputedStyle(entryLoader).display === 'none';
+  };
+
   const openBannerAfterLoader = () => {
-    if (!cookieBanner) return;
-
-    if (!entryLoader || entryLoader.hidden) {
-      openBanner();
-      return;
-    }
-
-    if (typeof MutationObserver !== 'undefined') {
-      const loaderObserver = new MutationObserver(() => {
-        if (entryLoader.hidden) {
-          loaderObserver.disconnect();
-          openBanner();
-        }
-      });
-
-      loaderObserver.observe(entryLoader, {
-        attributes: true,
-        attributeFilter: ['hidden']
-      });
-
-      if (entryLoader.hidden) {
-        loaderObserver.disconnect();
-        openBanner();
-      }
-      return;
-    }
-
     const checkLoader = () => {
-      if (entryLoader.hidden) openBanner();
-      else window.setTimeout(checkLoader, 250);
+      if (loaderHasDisappeared()) {
+        window.requestAnimationFrame(() => {
+          if (readChoice() === null) openBanner();
+        });
+        return;
+      }
+      window.setTimeout(checkLoader, 120);
     };
-    window.setTimeout(checkLoader, 250);
+
+    checkLoader();
   };
 
   const currentChoice = readChoice();
@@ -324,4 +319,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   manageBtn?.addEventListener('click', openBanner);
-});
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeCookieConsent, { once: true });
+} else {
+  initializeCookieConsent();
+}
