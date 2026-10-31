@@ -42,18 +42,39 @@ document.addEventListener('keydown', event => {
 
 const carousel = document.querySelector('.carousel');
 let pointerStart = null;
+let suppressSlideClick = false;
+
 carousel?.addEventListener('pointerdown', event => {
-  if (event.target.closest('button')) return;
-  pointerStart = event.clientX;
+  if (!event.isPrimary || event.button !== 0 || event.target.closest('button, a')) {
+    pointerStart = null;
+    return;
+  }
+
+  pointerStart = {
+    x: event.clientX,
+    y: event.clientY,
+    pointerId: event.pointerId
+  };
 });
+
 carousel?.addEventListener('pointerup', event => {
-  if (pointerStart === null) return;
-  const distance = event.clientX - pointerStart;
+  if (!pointerStart || pointerStart.pointerId !== event.pointerId) return;
+
+  const deltaX = event.clientX - pointerStart.x;
+  const deltaY = event.clientY - pointerStart.y;
   pointerStart = null;
-  if (Math.abs(distance) < 45) return;
-  setActiveSlide(activeIndex + (distance < 0 ? 1 : -1));
+
+  // A gesture changes slides only when it is clearly horizontal.
+  // Vertical movement remains native page scrolling on touch screens.
+  if (Math.abs(deltaX) < 45 || Math.abs(deltaX) <= Math.abs(deltaY) * 1.2) return;
+
+  suppressSlideClick = true;
+  window.setTimeout(() => { suppressSlideClick = false; }, 400);
+  setActiveSlide(activeIndex + (deltaX < 0 ? 1 : -1));
 });
+
 carousel?.addEventListener('pointercancel', () => { pointerStart = null; });
+carousel?.addEventListener('lostpointercapture', () => { pointerStart = null; });
 
 const dialog = document.querySelector('.project-dialog');
 let currentProjectIndex = 0;
@@ -100,6 +121,11 @@ document.querySelectorAll('[data-open]').forEach(button => {
 
 slides.forEach((slide, index) => {
   slide.addEventListener('click', event => {
+    if (suppressSlideClick) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
     if (event.target.closest('button')) return;
     if (index !== activeIndex) setActiveSlide(index);
     else openProject(slide.dataset.project);
