@@ -59,7 +59,7 @@ const dialog = document.querySelector('.project-dialog');
 let currentProjectIndex = 0;
 
 function openProject(key) {
-  if (['nano', 'codev', 'scuio', 'plaine', 'lundi', 'sacerdoce'].includes(key)) {
+  if (['nano', 'codev', 'scuio', 'plaine', 'lundi', 'sacerdoce', 'magik'].includes(key)) {
     document.getElementById('dialog-' + key)?.showModal();
     return;
   }
