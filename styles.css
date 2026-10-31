@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Poppins:wght@400;500;600&display=swap');
 
 :root{--ink:#050505;--ink-soft:#111216;--cream:#f7f7f5;--paper:#141518;--blue:#416bff;--muted:#a5a6ad;--line:rgba(247,247,245,.18);--mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;--display:'Manrope',sans-serif;color-scheme:dark}
 *{box-sizing:border-box}
@@ -626,7 +626,7 @@ button:hover i.fi-bs-arrow-up-right{
   }
 }
 
-/* STYLE DES ÉTIQUETTES D’OUTILS ET PLATEFORMES */
+/* ÉTIQUETTES D’OUTILS ET PLATEFORMES */
 .tool-tags b,
 .tool-tag,
 .skill-pill,
@@ -634,29 +634,34 @@ button:hover i.fi-bs-arrow-up-right{
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.55rem 1.25rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid rgba(21, 22, 26, 0.24);
   border-radius: 100px;
-  border: 1px solid #E0E0E0;
-  background-color: #FFFFFF;
+  background-color: transparent;
   color: #191919;
   font-family: 'Poppins', sans-serif;
-  font-size: 0.725rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.35;
+  text-transform: none;
   user-select: none;
   transition:
     background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
     color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
     border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .tool-tags b:hover,
 .tool-tag:hover,
 .skill-pill:hover,
-.tag-item:hover {
+.tag-item:hover,
+.tool-tags b:focus-visible,
+.tool-tag:focus-visible,
+.skill-pill:focus-visible,
+.tag-item:focus-visible {
   background-color: #191919;
   color: #FFFFFF;
   border-color: #191919;
@@ -664,13 +669,18 @@ button:hover i.fi-bs-arrow-up-right{
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-.tool-tags,
-.tools-grid,
-.tags-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.65rem;
-  margin-top: 1rem;
-  margin-bottom: 2rem;
-}
+@media (prefers-reduced-motion: reduce) {
+  .tool-tags b,
+  .tool-tag,
+  .skill-pill,
+  .tag-item {
+    transition: none;
+  }
 
+  .tool-tags b:hover,
+  .tool-tag:hover,
+  .skill-pill:hover,
+  .tag-item:hover {
+    transform: none;
+  }
+}
