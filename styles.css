@@ -790,3 +790,11 @@ p,
     overscroll-behavior: contain;
   }
 }
+
+
+@media (max-width: 768px) {
+  .slide.is-active .slide-gallery-count {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
