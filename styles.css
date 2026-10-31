@@ -502,7 +502,7 @@ button:hover i.fi-bs-arrow-up-right{
 }
 
 .stage-intro {
-  width: min(290px, 22vw) !important;
+  width: min(290px, calc(100vw - 10vw)) !important;
   max-width: 290px !important;
 }
 
