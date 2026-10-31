@@ -571,11 +571,11 @@ button:hover i.fi-bs-arrow-up-right{
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .project-accroche {
-    animation: none;
-    opacity: 1;
-    filter: none;
-    transform: none;
+  .project-accroche.accroche-blur {
+    animation: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
   }
 
   .experience-item,
