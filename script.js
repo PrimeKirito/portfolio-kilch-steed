@@ -68,7 +68,9 @@ const dedicatedProjectDialogs = {
   magik: 'dialog-magik',
   agency: 'dialog-agence',
   agence: 'dialog-agence',
-  '893': 'dialog-agence'
+  '893': 'dialog-agence',
+  autres: 'dialog-autres',
+  more: 'dialog-autres'
 };
 
 function openProject(key) {
