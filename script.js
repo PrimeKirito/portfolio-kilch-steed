@@ -205,3 +205,72 @@ if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-mot
 }
 
 setActiveSlide(0);
+
+/* --- CHOIX DE MESURE D'AUDIENCE : CHARGEMENT CONDITIONNEL CLOUDFLARE --- */
+document.addEventListener('DOMContentLoaded', () => {
+  const consentKey = 'cookie_consent_choice';
+  const cookieBanner = document.getElementById('cookie-banner');
+  const acceptBtn = document.getElementById('accept-cookies');
+  const declineBtn = document.getElementById('decline-cookies');
+  const manageBtn = document.getElementById('manage-cookies');
+  const analyticsTemplate = document.getElementById('cloudflare-analytics-template');
+
+  const readChoice = () => {
+    try {
+      return window.localStorage.getItem(consentKey);
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const saveChoice = choice => {
+    try {
+      window.localStorage.setItem(consentKey, choice);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const closeBanner = () => cookieBanner?.classList.remove('is-active');
+  const openBanner = () => cookieBanner?.classList.add('is-active');
+
+  const loadCloudflareAnalytics = () => {
+    if (!analyticsTemplate || document.querySelector('[data-cloudflare-analytics-loaded]')) return;
+
+    const source = analyticsTemplate.content.querySelector('script');
+    if (!source) return;
+
+    const beacon = document.createElement('script');
+    beacon.type = source.type || 'module';
+    beacon.src = source.src;
+    const beaconConfig = source.getAttribute('data-cf-beacon');
+    if (beaconConfig) beacon.setAttribute('data-cf-beacon', beaconConfig);
+    beacon.dataset.cloudflareAnalyticsLoaded = 'true';
+    document.body.appendChild(beacon);
+  };
+
+  const currentChoice = readChoice();
+  if (currentChoice === 'accepted') {
+    loadCloudflareAnalytics();
+  } else if (currentChoice !== 'declined') {
+    openBanner();
+  }
+
+  acceptBtn?.addEventListener('click', () => {
+    saveChoice('accepted');
+    loadCloudflareAnalytics();
+    closeBanner();
+  });
+
+  declineBtn?.addEventListener('click', () => {
+    saveChoice('declined');
+    closeBanner();
+    if (document.querySelector('[data-cloudflare-analytics-loaded]')) {
+      window.location.reload();
+    }
+  });
+
+  manageBtn?.addEventListener('click', openBanner);
+});
+
