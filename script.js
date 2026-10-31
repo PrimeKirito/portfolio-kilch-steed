@@ -58,9 +58,23 @@ carousel?.addEventListener('pointercancel', () => { pointerStart = null; });
 const dialog = document.querySelector('.project-dialog');
 let currentProjectIndex = 0;
 
+const dedicatedProjectDialogs = {
+  nano: 'dialog-nano',
+  codev: 'dialog-codev',
+  scuio: 'dialog-scuio',
+  plaine: 'dialog-plaine',
+  lundi: 'dialog-lundi',
+  sacerdoce: 'dialog-sacerdoce',
+  magik: 'dialog-magik',
+  agency: 'dialog-agence',
+  agence: 'dialog-agence',
+  '893': 'dialog-agence'
+};
+
 function openProject(key) {
-  if (['nano', 'codev', 'scuio', 'plaine', 'lundi', 'sacerdoce', 'magik'].includes(key)) {
-    document.getElementById('dialog-' + key)?.showModal();
+  const dedicatedDialogId = dedicatedProjectDialogs[key];
+  if (dedicatedDialogId) {
+    document.getElementById(dedicatedDialogId)?.showModal();
     return;
   }
   const itemIndex = projects.findIndex(project => project.key === key);
