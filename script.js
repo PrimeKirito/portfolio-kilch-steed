@@ -204,7 +204,7 @@ slides.forEach(slide => {
   });
 });
 
-const titleSelector = '.stage-intro h1, .slide-copy h2, .about-heading h2, .experience-heading h2, .contact-content h2, .animated-title';
+const titleSelector = '.slide-copy h2, .about-heading h2, .experience-heading h2, .contact-content h2, .animated-title';
 if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   const titles = Array.from(document.querySelectorAll(titleSelector));
   titles.forEach(title => title.classList.add('title-reveal'));
@@ -230,6 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const declineBtn = document.getElementById('decline-cookies');
   const manageBtn = document.getElementById('manage-cookies');
   const analyticsTemplate = document.getElementById('cloudflare-analytics-template');
+  const entryLoader = document.querySelector('[data-entry-loader]');
 
   const readChoice = () => {
     try {
@@ -266,11 +267,46 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(beacon);
   };
 
+  const openBannerAfterLoader = () => {
+    if (!cookieBanner) return;
+
+    if (!entryLoader || entryLoader.hidden) {
+      openBanner();
+      return;
+    }
+
+    if (typeof MutationObserver !== 'undefined') {
+      const loaderObserver = new MutationObserver(() => {
+        if (entryLoader.hidden) {
+          loaderObserver.disconnect();
+          openBanner();
+        }
+      });
+
+      loaderObserver.observe(entryLoader, {
+        attributes: true,
+        attributeFilter: ['hidden']
+      });
+
+      if (entryLoader.hidden) {
+        loaderObserver.disconnect();
+        openBanner();
+      }
+      return;
+    }
+
+    const checkLoader = () => {
+      if (entryLoader.hidden) openBanner();
+      else window.setTimeout(checkLoader, 250);
+    };
+    window.setTimeout(checkLoader, 250);
+  };
+
   const currentChoice = readChoice();
   if (currentChoice === 'accepted') {
     loadCloudflareAnalytics();
   } else if (currentChoice !== 'declined') {
-    openBanner();
+    openBannerAfterLoader();
   }
 
   acceptBtn?.addEventListener('click', () => {
@@ -289,4 +325,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
   manageBtn?.addEventListener('click', openBanner);
 });
-
