@@ -41,6 +41,7 @@ document.addEventListener('keydown', event => {
 });
 
 const carousel = document.querySelector('.carousel');
+const slideGalleryControls = new Map();
 let pointerStart = null;
 let suppressSlideClick = false;
 
@@ -53,24 +54,36 @@ carousel?.addEventListener('pointerdown', event => {
   pointerStart = {
     x: event.clientX,
     y: event.clientY,
-    pointerId: event.pointerId
+    pointerId: event.pointerId,
+    slide: event.target.closest('.slide')
   };
 });
 
 carousel?.addEventListener('pointerup', event => {
   if (!pointerStart || pointerStart.pointerId !== event.pointerId) return;
 
-  const deltaX = event.clientX - pointerStart.x;
-  const deltaY = event.clientY - pointerStart.y;
+  const start = pointerStart;
+  const deltaX = event.clientX - start.x;
+  const deltaY = event.clientY - start.y;
   pointerStart = null;
 
-  // A gesture changes slides only when it is clearly horizontal.
-  // Vertical movement remains native page scrolling on touch screens.
+  // Horizontal intent is required. Vertical movement remains native page scrolling.
   if (Math.abs(deltaX) < 45 || Math.abs(deltaX) <= Math.abs(deltaY) * 1.2) return;
 
   suppressSlideClick = true;
   window.setTimeout(() => { suppressSlideClick = false; }, 400);
-  setActiveSlide(activeIndex + (deltaX < 0 ? 1 : -1));
+
+  // On touch screens, swipe through the active card's images.
+  // Swiping outside the active card changes the project instead.
+  const gallery = start.slide?.classList.contains('is-active')
+    ? slideGalleryControls.get(start.slide)
+    : null;
+
+  if (gallery) {
+    gallery.step(deltaX < 0 ? 1 : -1);
+  } else {
+    setActiveSlide(activeIndex + (deltaX < 0 ? 1 : -1));
+  }
 });
 
 carousel?.addEventListener('pointercancel', () => { pointerStart = null; });
@@ -209,24 +222,31 @@ slides.forEach(slide => {
   counter.textContent = '01 / ' + String(gallery.length).padStart(2, '0');
   slide.append(counter);
   let chosen = 0;
+  const updateFrame = nextIndex => {
+    chosen = (nextIndex + gallery.length) % gallery.length;
+    image.src = encodeAsset(gallery[chosen]);
+    image.alt = slide.getAttribute('aria-label').replace(/^Projet \d+ sur \d+ : /, '') + ' — visuel ' + (chosen + 1) + ' sur ' + gallery.length;
+    counter.textContent = String(chosen + 1).padStart(2, '0') + ' / ' + String(gallery.length).padStart(2, '0');
+  };
+
+  slideGalleryControls.set(slide, {
+    step: direction => updateFrame(chosen + direction)
+  });
+
   const selectFrame = event => {
     if (event.pointerType !== 'mouse' || event.target.closest('button')) return;
     const rect = slide.getBoundingClientRect();
     const ratio = Math.min(0.999, Math.max(0, (event.clientX - rect.left) / rect.width));
     const next = Math.min(gallery.length - 1, Math.floor(ratio * gallery.length));
     if (next === chosen) return;
-    chosen = next;
-    image.src = encodeAsset(gallery[chosen]);
-    image.alt = slide.getAttribute('aria-label').replace(/^Projet \d+ sur \d+ : /, '') + ' — visuel ' + (chosen + 1) + ' sur ' + gallery.length;
-    counter.textContent = String(chosen + 1).padStart(2, '0') + ' / ' + String(gallery.length).padStart(2, '0');
+    updateFrame(next);
   };
+
   slide.addEventListener('pointermove', selectFrame);
-  slide.addEventListener('pointerleave', () => {
-    if (chosen === 0) return;
-    chosen = 0;
-    image.src = encodeAsset(gallery[0]);
-    image.alt = slide.getAttribute('aria-label').replace(/^Projet \d+ sur \d+ : /, '') + ' — visuel 1 sur ' + gallery.length;
-    counter.textContent = '01 / ' + String(gallery.length).padStart(2, '0');
+  slide.addEventListener('pointerleave', event => {
+    // Keep the selected frame after a touch swipe; only desktop hover previews reset.
+    if (event.pointerType !== 'mouse' || chosen === 0) return;
+    updateFrame(0);
   });
 });
 
