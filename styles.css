@@ -441,25 +441,6 @@ button:hover i.fi-bs-arrow-up-right{
   }
 }
 
-/* NOTE CENTRÉE DANS LE HEADER */
-.site-header {
-  /* Le header reste ancré en haut de la page comme dans la mise en page existante. */
-  position: absolute;
-}
-
-.header-note.centered-note {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  margin: 0;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #a5a6ad;
-  white-space: nowrap;
-}
 
 /* ACCROCHE DE LA SECTION PROJETS — POSITIONNEMENT AFFINÉ */
 .stage-intro {
@@ -489,8 +470,6 @@ button:hover i.fi-bs-arrow-up-right{
 .project-accroche:hover { opacity: 1; }
 
 @media (max-width: 768px) {
-  .header-note.centered-note { display: none; }
-
   .stage-intro {
     position: relative !important;
     top: auto !important;
@@ -507,3 +486,105 @@ button:hover i.fi-bs-arrow-up-right{
     font-size: 1rem !important;
   }
 }
+
+/* --- ANIMATION ET DÉCALAGE DE LA PHRASE D'ACCROCHE --- */
+@keyframes blurInLeft {
+  0% {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translateX(-24px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(0);
+  }
+}
+
+.stage-intro {
+  width: min(290px, 22vw) !important;
+  max-width: 290px !important;
+}
+
+.project-accroche {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: clamp(0.95rem, 1.25vw, 1.15rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.45 !important;
+  color: #FFFFFF !important;
+  letter-spacing: -0.01em !important;
+  max-width: 290px !important;
+  margin-top: 6.5rem !important;
+  margin-bottom: 2rem !important;
+  margin-left: -2rem !important;
+  animation: blurInLeft 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (max-width: 1024px) {
+  .project-accroche {
+    margin-left: 0 !important;
+    margin-top: 2rem !important;
+  }
+}
+
+/* --- INTERACTION DYNAMIQUE : EXPÉRIENCE ET COMPÉTENCES --- */
+/* Les sélecteurs ciblent les éléments réellement présents dans le HTML. */
+.experience-item,
+.skill-list li {
+  transition:
+    opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .experience-list:hover .experience-item:not(:hover),
+  .skill-list:hover li:not(:hover) {
+    opacity: 0.3;
+    filter: blur(1px);
+    transform: scale(0.98);
+  }
+
+  .experience-item:hover,
+  .skill-list li:hover {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(10px) scale(1.01);
+  }
+
+  .experience-item:hover h3,
+  .skill-list li:hover {
+    color: #0057FF;
+    transition: color 0.25s ease;
+  }
+}
+
+/* Le compteur reste centré depuis la suppression du texte d'instruction. */
+.carousel-footer {
+  grid-template-columns: 1fr auto 1fr;
+}
+
+.carousel-count {
+  grid-column: 2;
+  justify-self: center;
+}
+
+.contact-shortcut {
+  grid-column: 3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-accroche {
+    animation: none;
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+
+  .experience-item,
+  .skill-list li {
+    transition: none;
+  }
+}
+
