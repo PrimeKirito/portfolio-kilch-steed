@@ -333,6 +333,7 @@ slides.forEach(slide => {
 
   const layers = [firstImage, secondImage];
   let visibleLayerIndex = 0;
+  let visibleFrameIndex = 0;
   let chosen = 0;
   let frameRequestId = 0;
 
@@ -346,9 +347,11 @@ slides.forEach(slide => {
     const requestId = ++frameRequestId;
     const targetAlt = slide.getAttribute('aria-label').replace(/^Projet \d+ sur \d+ : /, '') +
       ' — visuel ' + (next + 1) + ' sur ' + gallery.length;
+    let frameRevealed = false;
 
     const revealLoadedFrame = () => {
-      if (requestId !== frameRequestId) return;
+      if (requestId !== frameRequestId || frameRevealed) return;
+      frameRevealed = true;
 
       const previousLayer = layers[visibleLayerIndex];
       previousLayer.classList.remove('is-visible');
@@ -358,6 +361,7 @@ slides.forEach(slide => {
       targetLayer.classList.add('is-visible');
       targetLayer.setAttribute('aria-hidden', 'false');
       visibleLayerIndex = targetLayerIndex;
+      visibleFrameIndex = next;
 
       // Keep the counter and accessible description in sync with the visible image.
       counter.textContent = String(next + 1).padStart(2, '0') + ' / ' + String(gallery.length).padStart(2, '0');
@@ -365,7 +369,7 @@ slides.forEach(slide => {
 
     targetLayer.onload = revealLoadedFrame;
     targetLayer.onerror = () => {
-      if (requestId === frameRequestId) chosen = (visibleLayerIndex === 0 ? 0 : chosen);
+      if (requestId === frameRequestId) chosen = visibleFrameIndex;
     };
     targetLayer.src = encodeAsset(gallery[next]);
 
