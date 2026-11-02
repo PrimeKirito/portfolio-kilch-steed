@@ -14,7 +14,67 @@ const slides = Array.from(document.querySelectorAll('.slide'));
 const currentNumber = document.querySelector('[data-current]');
 let activeIndex = 0;
 
+const slideGalleryControls = new Map();
+let internalGalleryInterval = null;
+let slideshowResumeTimeout = null;
+const AUTO_SLIDE_DELAY = 2800;
+const SLIDESHOW_RESUME_DELAY = 900;
+const reducedMotionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+function stopActiveProjectSlideshow() {
+  if (internalGalleryInterval !== null) {
+    window.clearInterval(internalGalleryInterval);
+    internalGalleryInterval = null;
+  }
+}
+
+function pauseActiveProjectSlideshow() {
+  stopActiveProjectSlideshow();
+  if (slideshowResumeTimeout !== null) {
+    window.clearTimeout(slideshowResumeTimeout);
+    slideshowResumeTimeout = null;
+  }
+}
+
+function startActiveProjectSlideshow() {
+  pauseActiveProjectSlideshow();
+
+  const activeCard = slides[activeIndex];
+  if (
+    !activeCard ||
+    !activeCard.classList.contains('is-active') ||
+    document.hidden ||
+    document.querySelector('dialog[open]') ||
+    reducedMotionPreference.matches
+  ) return;
+
+  // Do not rotate under a desktop pointer: manual hover-preview takes priority.
+  const fineHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (fineHover && activeCard.matches(':hover')) return;
+
+  const gallery = slideGalleryControls.get(activeCard);
+  if (!gallery || gallery.length <= 1) return;
+
+  internalGalleryInterval = window.setInterval(() => {
+    if (document.hidden || slides[activeIndex] !== activeCard || !activeCard.classList.contains('is-active')) {
+      stopActiveProjectSlideshow();
+      return;
+    }
+    gallery.step(1);
+  }, AUTO_SLIDE_DELAY);
+}
+
+function scheduleActiveProjectSlideshow(delay = SLIDESHOW_RESUME_DELAY) {
+  stopActiveProjectSlideshow();
+  if (slideshowResumeTimeout !== null) window.clearTimeout(slideshowResumeTimeout);
+  slideshowResumeTimeout = window.setTimeout(() => {
+    slideshowResumeTimeout = null;
+    startActiveProjectSlideshow();
+  }, delay);
+}
+
 function setActiveSlide(requestedIndex) {
+  pauseActiveProjectSlideshow();
   activeIndex = (requestedIndex + slides.length) % slides.length;
   slides.forEach((slide, index) => {
     const relative = (index - activeIndex + slides.length) % slides.length;
@@ -29,6 +89,7 @@ function setActiveSlide(requestedIndex) {
     slide.inert = relative !== 0;
   });
   if (currentNumber) currentNumber.textContent = String(activeIndex + 1).padStart(2, '0');
+  startActiveProjectSlideshow();
 }
 
 document.querySelector('[data-previous]')?.addEventListener('click', () => setActiveSlide(activeIndex - 1));
@@ -41,7 +102,6 @@ document.addEventListener('keydown', event => {
 });
 
 const carousel = document.querySelector('.carousel');
-const slideGalleryControls = new Map();
 let pointerStart = null;
 let suppressSlideClick = false;
 
@@ -51,12 +111,18 @@ carousel?.addEventListener('pointerdown', event => {
     return;
   }
 
+  const touchedSlide = event.target.closest('.slide');
   pointerStart = {
     x: event.clientX,
     y: event.clientY,
     pointerId: event.pointerId,
-    slide: event.target.closest('.slide')
+    pointerType: event.pointerType,
+    slide: touchedSlide
   };
+
+  if (touchedSlide?.classList.contains('is-active')) {
+    pauseActiveProjectSlideshow();
+  }
 });
 
 carousel?.addEventListener('pointerup', event => {
@@ -84,10 +150,23 @@ carousel?.addEventListener('pointerup', event => {
   } else {
     setActiveSlide(activeIndex + (deltaX < 0 ? 1 : -1));
   }
+
+  if (start.slide?.classList.contains('is-active')) {
+    scheduleActiveProjectSlideshow();
+  }
 });
 
-carousel?.addEventListener('pointercancel', () => { pointerStart = null; });
-carousel?.addEventListener('lostpointercapture', () => { pointerStart = null; });
+carousel?.addEventListener('pointercancel', () => {
+  const wasActive = pointerStart?.slide?.classList.contains('is-active');
+  pointerStart = null;
+  if (wasActive) scheduleActiveProjectSlideshow();
+});
+
+carousel?.addEventListener('lostpointercapture', () => {
+  const wasActive = pointerStart?.slide?.classList.contains('is-active');
+  pointerStart = null;
+  if (wasActive) scheduleActiveProjectSlideshow();
+});
 
 const dialog = document.querySelector('.project-dialog');
 let currentProjectIndex = 0;
@@ -108,6 +187,7 @@ const dedicatedProjectDialogs = {
 };
 
 function openProject(key) {
+  pauseActiveProjectSlideshow();
   const dedicatedDialogId = dedicatedProjectDialogs[key];
   if (dedicatedDialogId) {
     document.getElementById(dedicatedDialogId)?.showModal();
@@ -156,6 +236,20 @@ document.querySelectorAll('dialog.project-dialog').forEach(projectDialog => {
   projectDialog.addEventListener('click', event => {
     if (event.target === projectDialog) projectDialog.close();
   });
+
+  projectDialog.addEventListener('close', () => {
+    scheduleActiveProjectSlideshow(500);
+  });
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) pauseActiveProjectSlideshow();
+  else scheduleActiveProjectSlideshow(300);
+});
+
+reducedMotionPreference.addEventListener?.('change', event => {
+  if (event.matches) pauseActiveProjectSlideshow();
+  else scheduleActiveProjectSlideshow(300);
 });
 
 const navLinks = Array.from(document.querySelectorAll('.nav-item'));
@@ -212,24 +306,76 @@ const hoverGalleries = {
   autres: ['Autres01.png','Autres02.png','Autres03.png']
 };
 const encodeAsset = name => 'assets/' + encodeURIComponent(name).replace(/%2F/gi, '/');
+
 slides.forEach(slide => {
   const gallery = hoverGalleries[slide.dataset.project] || [];
-  const image = slide.querySelector('img');
-  if (gallery.length < 2 || !image) return;
+  const firstImage = slide.querySelector('img');
+  if (gallery.length < 2 || !firstImage) return;
+
   const counter = document.createElement('span');
   counter.className = 'slide-gallery-count';
   counter.setAttribute('aria-hidden', 'true');
   counter.textContent = '01 / ' + String(gallery.length).padStart(2, '0');
   slide.append(counter);
+
+  // Two synchronized layers allow an actual cross-fade without changing the card layout.
+  firstImage.classList.add('gallery-image-layer', 'is-visible');
+  firstImage.setAttribute('aria-hidden', 'false');
+
+  const secondImage = firstImage.cloneNode(false);
+  secondImage.classList.remove('is-visible');
+  secondImage.classList.add('gallery-image-layer');
+  secondImage.setAttribute('aria-hidden', 'true');
+  secondImage.alt = '';
+  secondImage.loading = 'eager';
+  secondImage.decoding = 'async';
+  slide.insertBefore(secondImage, slide.querySelector('.slide-scrim'));
+
+  const layers = [firstImage, secondImage];
+  let visibleLayerIndex = 0;
   let chosen = 0;
+  let frameRequestId = 0;
+
   const updateFrame = nextIndex => {
-    chosen = (nextIndex + gallery.length) % gallery.length;
-    image.src = encodeAsset(gallery[chosen]);
-    image.alt = slide.getAttribute('aria-label').replace(/^Projet \d+ sur \d+ : /, '') + ' — visuel ' + (chosen + 1) + ' sur ' + gallery.length;
-    counter.textContent = String(chosen + 1).padStart(2, '0') + ' / ' + String(gallery.length).padStart(2, '0');
+    const next = (nextIndex + gallery.length) % gallery.length;
+    if (next === chosen) return;
+
+    chosen = next;
+    const targetLayerIndex = 1 - visibleLayerIndex;
+    const targetLayer = layers[targetLayerIndex];
+    const requestId = ++frameRequestId;
+    const targetAlt = slide.getAttribute('aria-label').replace(/^Projet \d+ sur \d+ : /, '') +
+      ' — visuel ' + (next + 1) + ' sur ' + gallery.length;
+
+    const revealLoadedFrame = () => {
+      if (requestId !== frameRequestId) return;
+
+      const previousLayer = layers[visibleLayerIndex];
+      previousLayer.classList.remove('is-visible');
+      previousLayer.setAttribute('aria-hidden', 'true');
+
+      targetLayer.alt = targetAlt;
+      targetLayer.classList.add('is-visible');
+      targetLayer.setAttribute('aria-hidden', 'false');
+      visibleLayerIndex = targetLayerIndex;
+
+      // Keep the counter and accessible description in sync with the visible image.
+      counter.textContent = String(next + 1).padStart(2, '0') + ' / ' + String(gallery.length).padStart(2, '0');
+    };
+
+    targetLayer.onload = revealLoadedFrame;
+    targetLayer.onerror = () => {
+      if (requestId === frameRequestId) chosen = (visibleLayerIndex === 0 ? 0 : chosen);
+    };
+    targetLayer.src = encodeAsset(gallery[next]);
+
+    if (targetLayer.complete && targetLayer.naturalWidth > 0) {
+      window.requestAnimationFrame(revealLoadedFrame);
+    }
   };
 
   slideGalleryControls.set(slide, {
+    length: gallery.length,
     step: direction => updateFrame(chosen + direction)
   });
 
@@ -238,15 +384,24 @@ slides.forEach(slide => {
     const rect = slide.getBoundingClientRect();
     const ratio = Math.min(0.999, Math.max(0, (event.clientX - rect.left) / rect.width));
     const next = Math.min(gallery.length - 1, Math.floor(ratio * gallery.length));
-    if (next === chosen) return;
-    updateFrame(next);
+    if (next !== chosen) updateFrame(next);
   };
 
+  slide.addEventListener('pointerenter', event => {
+    if (event.pointerType === 'mouse' && slide.classList.contains('is-active')) {
+      pauseActiveProjectSlideshow();
+    }
+  });
+
   slide.addEventListener('pointermove', selectFrame);
+
   slide.addEventListener('pointerleave', event => {
-    // Keep the selected frame after a touch swipe; only desktop hover previews reset.
-    if (event.pointerType !== 'mouse' || chosen === 0) return;
-    updateFrame(0);
+    if (event.pointerType !== 'mouse') return;
+
+    if (chosen !== 0) updateFrame(0);
+    if (slide.classList.contains('is-active')) {
+      scheduleActiveProjectSlideshow();
+    }
   });
 });
 
