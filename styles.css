@@ -905,3 +905,57 @@ p,
     transition: none;
   }
 }
+
+
+/* --- SCROLLING LINE ANIMATION CONTAINER --- */
+.scroll-line-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.35;
+  transition: opacity 0.3s ease;
+  overflow: hidden;
+}
+
+.scroll-line-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#scroll-path {
+  transition: stroke-dashoffset 0.1s ease-out;
+}
+
+@media (max-width: 768px) {
+  .scroll-line-wrapper {
+    opacity: 0.2;
+  }
+}
+
+/* Hiérarchie des calques : la ligne se place au-dessus des fonds, sous les contenus interactifs. */
+.projects-stage > .carousel {
+  position: relative;
+  z-index: 2;
+}
+
+.projects-stage > .carousel-footer {
+  z-index: 5;
+}
+
+.marquee-section {
+  position: relative;
+  z-index: 2;
+}
+
+.about-section > *,
+.experience-section > *,
+.contact-section > * {
+  position: relative;
+  z-index: 2;
+}
