@@ -563,6 +563,10 @@ function initializeProcessStory() {
   const legFront = document.getElementById('process-leg-front');
   const armBack = document.getElementById('process-arm-back');
   const armFront = document.getElementById('process-arm-front');
+  const legBackShin = document.getElementById('process-leg-back-shin');
+  const legFrontShin = document.getElementById('process-leg-front-shin');
+  const armBackForearm = document.getElementById('process-arm-back-forearm');
+  const armFrontForearm = document.getElementById('process-arm-front-forearm');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const mobileLayout = window.matchMedia('(max-width: 768px)');
 
@@ -632,7 +636,13 @@ function initializeProcessStory() {
 
       // One original line-art character follows the route. The stride is driven by scroll,
       // so the character never keeps walking when the visitor stops.
-      const stride = Math.sin(progress * Math.PI * 22) * (reducedMotion.matches ? 0 : 22);
+      const phase = progress * Math.PI * 22;
+      const gait = reducedMotion.matches ? 0 : Math.sin(phase);
+      const stride = gait * 19;
+      const kneeFront = reducedMotion.matches ? 0 : Math.max(0, Math.sin(phase + 0.35)) * 34;
+      const kneeBack = reducedMotion.matches ? 0 : Math.max(0, Math.sin(phase - 0.35)) * 30;
+      const elbowFront = reducedMotion.matches ? 0 : 12 + Math.max(0, Math.sin(phase + 0.2)) * 13;
+      const elbowBack = reducedMotion.matches ? 0 : 12 + Math.max(0, Math.sin(phase - 0.2)) * 13;
       const mobile = mobileLayout.matches;
       const charScaleX = mobile ? 1.45 : 1;
       walker.setAttribute(
@@ -640,16 +650,21 @@ function initializeProcessStory() {
         `translate(${point.x.toFixed(2)} ${point.y.toFixed(2)}) scale(${(lastFacing * charScaleX).toFixed(2)} 1)`
       );
 
-      const bob = reducedMotion.matches ? 0 : Math.abs(Math.sin(progress * Math.PI * 22)) * 2.2;
+      const bob = reducedMotion.matches ? 0 : Math.abs(gait) * 2.2;
       const torso = document.getElementById('process-torso');
       const head = document.getElementById('process-head');
-      torso?.setAttribute('transform', `translate(0 ${bob.toFixed(2)}) rotate(${(Math.sin(progress * Math.PI * 22) * 2.1).toFixed(1)} 0 -70)`);
-      head?.setAttribute('transform', `translate(0 ${(-bob * 0.65).toFixed(2)}) rotate(${(Math.sin(progress * Math.PI * 22 + 0.5) * 1.5).toFixed(1)} 0 -130)`);
+      torso?.setAttribute('transform', `translate(0 ${bob.toFixed(2)}) rotate(${(gait * 2.1).toFixed(1)} 0 -70)`);
+      head?.setAttribute('transform', `translate(0 ${(-bob * 0.65).toFixed(2)}) rotate(${(gait * 1.5).toFixed(1)} 0 -130)`);
 
+      // Upper and lower limbs rotate independently at the hip, knee, shoulder and elbow.
       legBack?.setAttribute('transform', `rotate(${stride.toFixed(1)} -8 -43)`);
       legFront?.setAttribute('transform', `rotate(${(-stride).toFixed(1)} 8 -43)`);
-      armBack?.setAttribute('transform', `rotate(${(-stride * 0.72).toFixed(1)} -12 -83)`);
-      armFront?.setAttribute('transform', `rotate(${(stride * 0.72).toFixed(1)} 13 -83)`);
+      legBackShin?.setAttribute('transform', `translate(-18 -18) rotate(${kneeBack.toFixed(1)})`);
+      legFrontShin?.setAttribute('transform', `translate(19 -17) rotate(${(-kneeFront).toFixed(1)})`);
+      armBack?.setAttribute('transform', `rotate(${(-stride * 0.66).toFixed(1)} -12 -83)`);
+      armFront?.setAttribute('transform', `rotate(${(stride * 0.66).toFixed(1)} 13 -83)`);
+      armBackForearm?.setAttribute('transform', `translate(-25 -62) rotate(${elbowBack.toFixed(1)})`);
+      armFrontForearm?.setAttribute('transform', `translate(28 -62) rotate(${(-elbowFront).toFixed(1)})`);
 
       // Milestones sit exactly on the route, not at approximate hard-coded positions.
       [0.22, 0.58, 0.9].forEach((fraction, index) => {
