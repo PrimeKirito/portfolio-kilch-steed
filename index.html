@@ -179,20 +179,32 @@
             <g class="process-walker__drawing" fill="none" stroke="#F3EFE7" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
               <ellipse cx="4" cy="5" rx="24" ry="2.5" fill="#F3EFE7" stroke="none" opacity=".72"/>
               <g id="process-leg-back">
-                <path d="M-8 -43 C-13 -29 -24 -15 -35 -4 L-43 1" stroke-width="8"/>
-                <path d="M-43 1 Q-49 5 -46 11 L-31 8 Q-25 5 -24 1" stroke-width="2.5"/>
+                <path d="M-8 -43 Q-13 -30 -18 -18 L-18 -18" stroke-width="8"/>
+                <g id="process-leg-back-shin" transform="translate(-18 -18)">
+                  <path d="M0 0 Q-7 10 -14 22 L-22 29" stroke-width="7.2"/>
+                  <path d="M-22 29 Q-29 33 -27 38 L-11 35 Q-5 33 -5 29" stroke-width="2.5"/>
+                </g>
               </g>
               <g id="process-leg-front">
-                <path d="M8 -43 C18 -31 27 -19 31 -6 L39 0" stroke-width="8"/>
-                <path d="M39 0 Q48 -1 53 -6 Q42 -7 34 -5" stroke-width="2.5"/>
+                <path d="M8 -43 Q15 -29 19 -17 L19 -17" stroke-width="8"/>
+                <g id="process-leg-front-shin" transform="translate(19 -17)">
+                  <path d="M0 0 Q7 10 12 22 L18 28" stroke-width="7.2"/>
+                  <path d="M18 28 Q28 28 31 23 Q20 22 13 25" stroke-width="2.5"/>
+                </g>
               </g>
               <g id="process-arm-back">
-                <path d="M-12 -83 Q-25 -73 -28 -59 L-19 -48" stroke-width="6"/>
-                <path d="M-19 -48 Q-15 -44 -11 -48" stroke-width="2.4"/>
+                <path d="M-12 -83 Q-23 -73 -25 -62" stroke-width="6"/>
+                <g id="process-arm-back-forearm" transform="translate(-25 -62)">
+                  <path d="M0 0 Q-1 9 7 17 L13 21" stroke-width="5.5"/>
+                  <path d="M13 21 Q17 18 15 14" stroke-width="2.3"/>
+                </g>
               </g>
               <g id="process-arm-front">
-                <path d="M13 -83 Q27 -75 34 -63 L43 -69" stroke-width="6"/>
-                <path d="M43 -69 Q48 -73 45 -77" stroke-width="2.4"/>
+                <path d="M13 -83 Q25 -74 28 -62" stroke-width="6"/>
+                <g id="process-arm-front-forearm" transform="translate(28 -62)">
+                  <path d="M0 0 Q5 8 12 13 L19 10" stroke-width="5.5"/>
+                  <path d="M19 10 Q23 6 20 3" stroke-width="2.3"/>
+                </g>
               </g>
               <g id="process-torso">
                 <path d="M-13 -91 Q0 -98 15 -90 L22 -54 Q5 -46 -18 -53 L-20 -76 Z" fill="#11141C" stroke-width="3.4"/>
@@ -205,6 +217,7 @@
                 <path d="M20 -132 Q31 -138 31 -127 Q29 -118 21 -119" stroke-width="2.2"/>
                 <path d="M-18 -132 C-29 -136 -29 -147 -20 -152 C-23 -164 -10 -171 -1 -164 C5 -176 20 -171 21 -160 C34 -163 41 -151 33 -142 C39 -132 29 -125 21 -130 C13 -122 2 -126 -3 -132 C-9 -125 -17 -127 -18 -132 Z" fill="#11141C" stroke-width="2.8"/>
                 <path d="M-21 -143 Q-25 -151 -17 -155 M-8 -162 Q-2 -169 5 -160 M10 -163 Q18 -168 23 -158 M25 -151 Q33 -151 34 -143" stroke-width="1.8"/>
+                <path d="M-27 -137 Q-34 -141 -29 -148 M-15 -163 Q-18 -171 -10 -172 M1 -170 Q7 -178 14 -170 M22 -166 Q31 -171 34 -162 M34 -151 Q42 -149 39 -141" stroke-width="1.7"/>
                 <ellipse cx="-5" cy="-132" rx="1.9" ry="2.7" fill="#F3EFE7" stroke="none"/>
                 <ellipse cx="10" cy="-132" rx="1.9" ry="2.7" fill="#F3EFE7" stroke="none"/>
                 <path d="M3 -129 Q0 -123 4 -122 M0 -116 Q4 -114 8 -116" stroke-width="1.7"/>
