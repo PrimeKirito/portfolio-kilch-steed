@@ -567,6 +567,7 @@ function initializeProcessStory() {
   const legFrontShin = document.getElementById('process-leg-front-shin');
   const armBackForearm = document.getElementById('process-arm-back-forearm');
   const armFrontForearm = document.getElementById('process-arm-front-forearm');
+  const hair = document.getElementById('process-hair');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const mobileLayout = window.matchMedia('(max-width: 768px)');
 
@@ -636,13 +637,15 @@ function initializeProcessStory() {
 
       // One original line-art character follows the route. The stride is driven by scroll,
       // so the character never keeps walking when the visitor stops.
-      const phase = progress * Math.PI * 22;
+      const phase = progress * Math.PI * 20;
       const gait = reducedMotion.matches ? 0 : Math.sin(phase);
-      const stride = gait * 19;
-      const kneeFront = reducedMotion.matches ? 0 : Math.max(0, Math.sin(phase + 0.35)) * 34;
-      const kneeBack = reducedMotion.matches ? 0 : Math.max(0, Math.sin(phase - 0.35)) * 30;
-      const elbowFront = reducedMotion.matches ? 0 : 12 + Math.max(0, Math.sin(phase + 0.2)) * 13;
-      const elbowBack = reducedMotion.matches ? 0 : 12 + Math.max(0, Math.sin(phase - 0.2)) * 13;
+      const stride = gait * 17;
+      // Les jambes et les avant-bras alternent réellement : un côté se replie
+      // pendant que l'autre s'allonge, au lieu de reproduire le même geste.
+      const kneeFront = reducedMotion.matches ? 0 : Math.max(0, Math.sin(phase + 0.35)) * 38;
+      const kneeBack = reducedMotion.matches ? 0 : Math.max(0, Math.sin(phase + Math.PI - 0.35)) * 32;
+      const elbowFront = reducedMotion.matches ? 0 : 5 + Math.max(0, Math.sin(phase + 0.45)) * 18;
+      const elbowBack = reducedMotion.matches ? 0 : 5 + Math.max(0, Math.sin(phase + Math.PI - 0.45)) * 18;
       const mobile = mobileLayout.matches;
       const charScaleX = mobile ? 1.45 : 1;
       walker.setAttribute(
@@ -650,11 +653,13 @@ function initializeProcessStory() {
         `translate(${point.x.toFixed(2)} ${point.y.toFixed(2)}) scale(${(lastFacing * charScaleX).toFixed(2)} 1)`
       );
 
-      const bob = reducedMotion.matches ? 0 : Math.abs(gait) * 2.2;
+      const bob = reducedMotion.matches ? 0 : Math.abs(gait) * 2.1;
       const torso = document.getElementById('process-torso');
       const head = document.getElementById('process-head');
-      torso?.setAttribute('transform', `translate(0 ${bob.toFixed(2)}) rotate(${(gait * 2.1).toFixed(1)} 0 -70)`);
-      head?.setAttribute('transform', `translate(0 ${(-bob * 0.65).toFixed(2)}) rotate(${(gait * 1.5).toFixed(1)} 0 -130)`);
+      const bodyLean = reducedMotion.matches ? 0 : -1.1 + gait * 2.4;
+      torso?.setAttribute('transform', `translate(0 ${bob.toFixed(2)}) rotate(${bodyLean.toFixed(1)} 0 -70)`);
+      head?.setAttribute('transform', `translate(0 ${(-bob * 0.7).toFixed(2)}) rotate(${(-bodyLean * 0.48).toFixed(1)} 0 -130)`);
+      hair?.setAttribute('transform', `rotate(${(reducedMotion.matches ? 0 : Math.sin(phase + 0.8) * 1.25).toFixed(2)} 0 -151)`);
 
       // Upper and lower limbs rotate independently at the hip, knee, shoulder and elbow.
       legBack?.setAttribute('transform', `rotate(${stride.toFixed(1)} -8 -43)`);
