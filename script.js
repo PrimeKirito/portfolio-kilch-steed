@@ -632,7 +632,7 @@ function initializeProcessStory() {
 
       // One original line-art character follows the route. The stride is driven by scroll,
       // so the character never keeps walking when the visitor stops.
-      const stride = Math.sin(progress * Math.PI * 34) * (reducedMotion.matches ? 0 : 17);
+      const stride = Math.sin(progress * Math.PI * 22) * (reducedMotion.matches ? 0 : 22);
       const mobile = mobileLayout.matches;
       const charScaleX = mobile ? 1.45 : 1;
       walker.setAttribute(
@@ -640,10 +640,10 @@ function initializeProcessStory() {
         `translate(${point.x.toFixed(2)} ${point.y.toFixed(2)}) scale(${(lastFacing * charScaleX).toFixed(2)} 1)`
       );
 
-      legBack?.setAttribute('transform', `rotate(${stride.toFixed(1)} -9 -35)`);
-      legFront?.setAttribute('transform', `rotate(${(-stride).toFixed(1)} 8 -35)`);
-      armBack?.setAttribute('transform', `rotate(${(-stride * 0.7).toFixed(1)} -13 -69)`);
-      armFront?.setAttribute('transform', `rotate(${(stride * 0.7).toFixed(1)} 12 -68)`);
+      legBack?.setAttribute('transform', `rotate(${stride.toFixed(1)} -8 -43)`);
+      legFront?.setAttribute('transform', `rotate(${(-stride).toFixed(1)} 8 -43)`);
+      armBack?.setAttribute('transform', `rotate(${(-stride * 0.72).toFixed(1)} -12 -83)`);
+      armFront?.setAttribute('transform', `rotate(${(stride * 0.72).toFixed(1)} 13 -83)`);
 
       // Milestones sit exactly on the route, not at approximate hard-coded positions.
       [0.22, 0.58, 0.9].forEach((fraction, index) => {
