@@ -1334,6 +1334,11 @@ p,
   48% { transform:translate(-4px,-8px) rotate(5deg); opacity:.88; }
 }
 #process-walker .process-walker__drawing { filter:none; }
+#process-hair {
+  transform-box:fill-box;
+  transform-origin:center;
+  will-change:transform;
+}
 #process-walker { transform-origin:center; }
 @media (prefers-reduced-motion:reduce) {
   .process-doodle-bubble { animation:none; will-change:auto; }
