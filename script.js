@@ -640,6 +640,12 @@ function initializeProcessStory() {
         `translate(${point.x.toFixed(2)} ${point.y.toFixed(2)}) scale(${(lastFacing * charScaleX).toFixed(2)} 1)`
       );
 
+      const bob = reducedMotion.matches ? 0 : Math.abs(Math.sin(progress * Math.PI * 22)) * 2.2;
+      const torso = document.getElementById('process-torso');
+      const head = document.getElementById('process-head');
+      torso?.setAttribute('transform', `translate(0 ${bob.toFixed(2)}) rotate(${(Math.sin(progress * Math.PI * 22) * 2.1).toFixed(1)} 0 -70)`);
+      head?.setAttribute('transform', `translate(0 ${(-bob * 0.65).toFixed(2)}) rotate(${(Math.sin(progress * Math.PI * 22 + 0.5) * 1.5).toFixed(1)} 0 -130)`);
+
       legBack?.setAttribute('transform', `rotate(${stride.toFixed(1)} -8 -43)`);
       legFront?.setAttribute('transform', `rotate(${(-stride).toFixed(1)} 8 -43)`);
       armBack?.setAttribute('transform', `rotate(${(-stride * 0.72).toFixed(1)} -12 -83)`);
