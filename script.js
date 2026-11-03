@@ -531,3 +531,52 @@ if (document.readyState === 'loading') {
 } else {
   initializeCookieConsent();
 }
+
+
+/* --- SCROLLYTELLING : DESSIN PROGRESSIF DE LA LIGNE SVG --- */
+function initializeScrollLine() {
+  const path = document.getElementById('scroll-path');
+  if (!path || typeof path.getTotalLength !== 'function') return;
+
+  const pathLength = path.getTotalLength();
+  if (!Number.isFinite(pathLength) || pathLength <= 0) return;
+
+  path.style.strokeDasharray = `${pathLength} ${pathLength}`;
+  path.style.strokeDashoffset = String(pathLength);
+
+  let scrollFramePending = false;
+
+  const updateLineOnScroll = () => {
+    if (scrollFramePending) return;
+
+    scrollFramePending = true;
+    window.requestAnimationFrame(() => {
+      const root = document.documentElement;
+      const scrollTop = Math.max(0, window.scrollY || root.scrollTop || 0);
+      const pageHeight = Math.max(root.scrollHeight, document.body?.scrollHeight || 0);
+      const scrollHeight = Math.max(0, pageHeight - window.innerHeight);
+      const scrollFraction = scrollHeight > 0
+        ? Math.min(1, Math.max(0, scrollTop / scrollHeight))
+        : 0;
+      const drawLength = pathLength * scrollFraction;
+
+      path.style.strokeDashoffset = String(pathLength - drawLength);
+      scrollFramePending = false;
+    });
+  };
+
+  window.addEventListener('scroll', updateLineOnScroll, { passive: true });
+  window.addEventListener('resize', updateLineOnScroll, { passive: true });
+  window.addEventListener('load', updateLineOnScroll, { once: true });
+
+  // Recalculate when responsive content, images or fonts change the document height.
+  if ('ResizeObserver' in window && document.body) {
+    const pageSizeObserver = new ResizeObserver(updateLineOnScroll);
+    pageSizeObserver.observe(document.body);
+    pageSizeObserver.observe(document.documentElement);
+  }
+
+  updateLineOnScroll();
+}
+
+initializeScrollLine();
