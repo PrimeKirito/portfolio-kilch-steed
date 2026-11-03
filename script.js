@@ -533,10 +533,13 @@ if (document.readyState === 'loading') {
 }
 
 
-/* --- SCROLLYTELLING : DESSIN PROGRESSIF DE LA LIGNE SVG --- */
+/* --- SCROLLYTELLING : TRACÉ CONTINU SUR TOUTE LA PAGE --- */
 function initializeScrollLine() {
+  const wrapper = document.querySelector('.scroll-line-wrapper');
   const path = document.getElementById('scroll-path');
-  if (!path || typeof path.getTotalLength !== 'function') return;
+  const pageContent = document.querySelector('main#contenu') || document.body;
+
+  if (!wrapper || !path || typeof path.getTotalLength !== 'function') return;
 
   const pathLength = path.getTotalLength();
   if (!Number.isFinite(pathLength) || pathLength <= 0) return;
@@ -544,39 +547,47 @@ function initializeScrollLine() {
   path.style.strokeDasharray = `${pathLength} ${pathLength}`;
   path.style.strokeDashoffset = String(pathLength);
 
-  let scrollFramePending = false;
+  let framePending = false;
 
-  const updateLineOnScroll = () => {
-    if (scrollFramePending) return;
+  // The SVG itself spans the full document, not only the visible viewport.
+  const updateScrollLine = () => {
+    if (framePending) return;
+    framePending = true;
 
-    scrollFramePending = true;
     window.requestAnimationFrame(() => {
       const root = document.documentElement;
-      const scrollTop = Math.max(0, window.scrollY || root.scrollTop || 0);
-      const pageHeight = Math.max(root.scrollHeight, document.body?.scrollHeight || 0);
-      const scrollHeight = Math.max(0, pageHeight - window.innerHeight);
-      const scrollFraction = scrollHeight > 0
-        ? Math.min(1, Math.max(0, scrollTop / scrollHeight))
-        : 0;
-      const drawLength = pathLength * scrollFraction;
+      const contentBottom = pageContent.getBoundingClientRect().bottom + window.scrollY;
+      const pageHeight = Math.max(
+        pageContent.scrollHeight,
+        contentBottom,
+        root.clientHeight,
+        window.innerHeight
+      );
 
-      path.style.strokeDashoffset = String(pathLength - drawLength);
-      scrollFramePending = false;
+      wrapper.style.height = `${pageHeight}px`;
+
+      const scrollRange = Math.max(0, pageHeight - window.innerHeight);
+      const scrollTop = Math.max(0, window.scrollY || root.scrollTop || 0);
+      const scrollFraction = scrollRange > 0
+        ? Math.min(1, Math.max(0, scrollTop / scrollRange))
+        : 0;
+
+      path.style.strokeDashoffset = String(pathLength * (1 - scrollFraction));
+      framePending = false;
     });
   };
 
-  window.addEventListener('scroll', updateLineOnScroll, { passive: true });
-  window.addEventListener('resize', updateLineOnScroll, { passive: true });
-  window.addEventListener('load', updateLineOnScroll, { once: true });
+  window.addEventListener('scroll', updateScrollLine, { passive: true });
+  window.addEventListener('resize', updateScrollLine, { passive: true });
+  window.addEventListener('load', updateScrollLine, { once: true });
 
-  // Recalculate when responsive content, images or fonts change the document height.
-  if ('ResizeObserver' in window && document.body) {
-    const pageSizeObserver = new ResizeObserver(updateLineOnScroll);
-    pageSizeObserver.observe(document.body);
-    pageSizeObserver.observe(document.documentElement);
+  // Keep the SVG height synchronized when fonts, images or responsive content change the page.
+  if ('ResizeObserver' in window && pageContent) {
+    const pageSizeObserver = new ResizeObserver(updateScrollLine);
+    pageSizeObserver.observe(pageContent);
   }
 
-  updateLineOnScroll();
+  updateScrollLine();
 }
 
 initializeScrollLine();
