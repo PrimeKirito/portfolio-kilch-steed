@@ -1303,15 +1303,38 @@ p,
 }
 
 
-/* CHARACTER V2 — organic doodle details */
+/* CHARACTER V3 — hand-drawn motion, with deliberately varied rhythms */
 .process-doodles { pointer-events:none; }
-.process-doodle-bubble { transform-box:fill-box; transform-origin:center; animation:doodleDrift 4.8s ease-in-out infinite; }
-.process-doodle-bubble.bubble-b { animation-delay:-1.3s; }
-.process-doodle-bubble.bubble-c { animation-delay:-2.4s; }
-.process-doodle-bubble.bubble-d { animation-delay:-3.1s; }
-@keyframes doodleDrift {
-  0%,100% { transform:translate3d(0,0,0) rotate(-2deg); opacity:.55; }
-  50% { transform:translate3d(0,-10px,0) rotate(3deg); opacity:1; }
+.process-doodle-bubble {
+  transform-box:fill-box;
+  transform-origin:center;
+  will-change:transform,opacity;
+}
+.process-doodle-bubble.bubble-a { animation:doodleDriftA 5.7s ease-in-out infinite; }
+.process-doodle-bubble.bubble-b { animation:doodleDriftB 6.4s ease-in-out -1.8s infinite; }
+.process-doodle-bubble.bubble-c { animation:doodleDriftC 5.1s ease-in-out -2.6s infinite; }
+.process-doodle-bubble.bubble-d { animation:doodleDriftD 7.2s ease-in-out -3.4s infinite; }
+@keyframes doodleDriftA {
+  0%,100% { transform:translate(0,0) rotate(-3deg); opacity:.58; }
+  35% { transform:translate(5px,-7px) rotate(1deg); opacity:.92; }
+  72% { transform:translate(-2px,-12px) rotate(4deg); opacity:.72; }
+}
+@keyframes doodleDriftB {
+  0%,100% { transform:translate(0,0) rotate(2deg); opacity:.52; }
+  42% { transform:translate(-7px,-9px) rotate(-4deg); opacity:1; }
+  78% { transform:translate(3px,-4px) rotate(1deg); opacity:.68; }
+}
+@keyframes doodleDriftC {
+  0%,100% { transform:translate(0,0) rotate(0); opacity:.62; }
+  28% { transform:translate(4px,-5px) rotate(7deg); opacity:.9; }
+  65% { transform:translate(-5px,-10px) rotate(-5deg); opacity:.74; }
+}
+@keyframes doodleDriftD {
+  0%,100% { transform:translate(0,0) rotate(-2deg); opacity:.5; }
+  48% { transform:translate(-4px,-8px) rotate(5deg); opacity:.88; }
 }
 #process-walker .process-walker__drawing { filter:none; }
-@media (prefers-reduced-motion:reduce) { .process-doodle-bubble { animation:none; } }
+#process-walker { transform-origin:center; }
+@media (prefers-reduced-motion:reduce) {
+  .process-doodle-bubble { animation:none; will-change:auto; }
+}
