@@ -1301,3 +1301,17 @@ p,
     transform: none;
   }
 }
+
+
+/* CHARACTER V2 — organic doodle details */
+.process-doodles { pointer-events:none; }
+.process-doodle-bubble { transform-box:fill-box; transform-origin:center; animation:doodleDrift 4.8s ease-in-out infinite; }
+.process-doodle-bubble.bubble-b { animation-delay:-1.3s; }
+.process-doodle-bubble.bubble-c { animation-delay:-2.4s; }
+.process-doodle-bubble.bubble-d { animation-delay:-3.1s; }
+@keyframes doodleDrift {
+  0%,100% { transform:translate3d(0,0,0) rotate(-2deg); opacity:.55; }
+  50% { transform:translate3d(0,-10px,0) rotate(3deg); opacity:1; }
+}
+#process-walker .process-walker__drawing { filter:none; }
+@media (prefers-reduced-motion:reduce) { .process-doodle-bubble { animation:none; } }
