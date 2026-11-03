@@ -905,3 +905,184 @@ p,
     transition: none;
   }
 }
+
+
+/* --- SECTION MÉTHODOLOGIE & PROCESSUS --- */
+.methodology-section {
+  position: relative;
+  padding: 5rem 2rem;
+  background-color: #0B0B0B;
+  color: #FFFFFF;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.methodology-header {
+  max-width: 1200px;
+  margin: 0 auto 4rem;
+  text-align: left;
+  position: relative;
+  z-index: 2;
+}
+
+.methodology-header .section-kicker {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  color: #0057FF;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.methodology-header h2 {
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.methodology-header h2 em {
+  font-style: italic;
+  font-weight: 300;
+  color: #A0A0A0;
+}
+
+.methodology-container {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.methodology-svg-wrap {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.methodology-path-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+#methodology-path {
+  transition: stroke-dashoffset 0.1s ease-out;
+  vector-effect: non-scaling-stroke;
+}
+
+.methodology-steps {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  width: 100%;
+}
+
+.method-step-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 16px;
+  max-width: 550px;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.method-step-card:nth-child(even) {
+  align-self: flex-end;
+}
+
+.method-step-card:nth-child(odd) {
+  align-self: flex-start;
+}
+
+.method-step-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 87, 255, 0.5);
+}
+
+.step-num {
+  flex: 0 0 auto;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0057FF;
+}
+
+.step-content {
+  min-width: 0;
+}
+
+.step-content h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: #FFFFFF;
+}
+
+.step-content p {
+  font-size: 0.925rem;
+  color: #CCCCCC;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Adaptation responsive pour mobile. */
+@media (max-width: 768px) {
+  .methodology-section {
+    padding: 3.5rem 1.25rem;
+  }
+
+  .methodology-header {
+    margin-bottom: 2.75rem;
+  }
+
+  .methodology-container {
+    width: 100%;
+  }
+
+  .methodology-steps {
+    gap: 2rem;
+  }
+
+  .method-step-card,
+  .method-step-card:nth-child(even),
+  .method-step-card:nth-child(odd) {
+    align-self: center;
+    width: 100%;
+    max-width: 550px;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  .methodology-svg-wrap {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #methodology-path {
+    transition: none;
+  }
+
+  .method-step-card {
+    transition: none;
+  }
+
+  .method-step-card:hover {
+    transform: none;
+  }
+}
