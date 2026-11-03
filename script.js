@@ -533,3 +533,155 @@ if (document.readyState === 'loading') {
 }
 
 
+
+
+/* --- PROCESS STORY : PERSONNAGE ET DESSIN SYNCHRONISÉS AU SCROLL --- */
+function initializeProcessStory() {
+  const map = document.querySelector('[data-process-map]');
+  const artwork = document.getElementById('process-artwork');
+  const path = document.getElementById('process-route-progress');
+  const walker = document.getElementById('process-walker');
+
+  if (!map || !artwork || !path || !walker || typeof path.getTotalLength !== 'function') return;
+
+  const basePathDesktop = 'M 70 390 C 190 300 340 310 480 385 S 740 470 880 360 S 1050 300 1130 400 C 1200 520 1130 680 1000 770 S 770 875 610 830 S 330 760 170 900 C 70 980 130 1160 270 1240 S 590 1370 770 1320 S 1010 1270 1140 1430';
+  const basePathMobile = 'M 38 360 C 120 300 300 320 365 420 S 350 620 220 700 S 42 810 62 950 S 260 1080 365 1200 S 285 1370 120 1460';
+
+  const scenes = [
+    document.getElementById('process-scene-01'),
+    document.getElementById('process-scene-02'),
+    document.getElementById('process-scene-03')
+  ];
+  const steps = Array.from(document.querySelectorAll('[data-process-step]'));
+  const pins = [
+    document.getElementById('process-pin-01'),
+    document.getElementById('process-pin-02'),
+    document.getElementById('process-pin-03')
+  ];
+  const stepCounter = document.getElementById('process-current-step');
+  const legBack = document.getElementById('process-leg-back');
+  const legFront = document.getElementById('process-leg-front');
+  const armBack = document.getElementById('process-arm-back');
+  const armFront = document.getElementById('process-arm-front');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const mobileLayout = window.matchMedia('(max-width: 768px)');
+
+  let pathLength = 0;
+  let framePending = false;
+  let lastFacing = 1;
+  let activeScene = -1;
+
+  const applyArtLayout = () => {
+    const mobile = mobileLayout.matches;
+    artwork.setAttribute('viewBox', mobile ? '0 0 420 1500' : '0 0 1200 1500');
+    path.setAttribute('d', mobile ? basePathMobile : basePathDesktop);
+    document.querySelector('.process-route-base')?.setAttribute('d', mobile ? basePathMobile : basePathDesktop);
+
+    scenes[0]?.setAttribute('transform', mobile ? 'translate(270 130) scale(.78)' : 'translate(860 105)');
+    scenes[1]?.setAttribute('transform', mobile ? 'translate(10 620) scale(.72)' : 'translate(65 615)');
+    scenes[2]?.setAttribute('transform', mobile ? 'translate(235 1010) scale(.72)' : 'translate(810 985)');
+
+    pathLength = path.getTotalLength();
+    path.style.strokeDasharray = `${pathLength} ${pathLength}`;
+    path.style.strokeDashoffset = String(pathLength);
+    activeScene = -1;
+  };
+
+  const clamp = value => Math.min(1, Math.max(0, value));
+
+  const updateSceneStates = progress => {
+    const nextScene = progress < 0.34 ? 0 : progress < 0.68 ? 1 : 2;
+    if (nextScene !== activeScene) {
+      activeScene = nextScene;
+      scenes.forEach((scene, index) => {
+        scene?.classList.toggle('is-current', index === nextScene);
+        scene?.classList.toggle('is-complete', index < nextScene);
+      });
+      steps.forEach((step, index) => {
+        step.classList.toggle('is-current', index === nextScene);
+        step.classList.toggle('is-complete', index < nextScene);
+      });
+      pins.forEach((pin, index) => {
+        pin?.classList.toggle('is-current', index === nextScene);
+        pin?.classList.toggle('is-complete', index < nextScene);
+      });
+      if (stepCounter) stepCounter.textContent = String(nextScene + 1).padStart(2, '0');
+    }
+  };
+
+  const updateProcessStory = () => {
+    if (framePending) return;
+    framePending = true;
+
+    window.requestAnimationFrame(() => {
+      const rect = map.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const travelDistance = rect.height + viewportHeight;
+      const travelled = viewportHeight - rect.top;
+      const progress = reducedMotion.matches
+        ? 1
+        : travelDistance > 0 ? clamp(travelled / travelDistance) : 0;
+
+      const drawnLength = pathLength * progress;
+      path.style.strokeDashoffset = String(pathLength - drawnLength);
+
+      const point = path.getPointAtLength(drawnLength);
+      const nextPoint = path.getPointAtLength(Math.min(pathLength, drawnLength + 4));
+      const deltaX = nextPoint.x - point.x;
+      if (Math.abs(deltaX) > 0.5) lastFacing = deltaX < 0 ? -1 : 1;
+
+      // One original line-art character follows the route. The stride is driven by scroll,
+      // so the character never keeps walking when the visitor stops.
+      const stride = Math.sin(progress * Math.PI * 34) * (reducedMotion.matches ? 0 : 17);
+      const mobile = mobileLayout.matches;
+      const charScaleX = mobile ? 1.45 : 1;
+      walker.setAttribute(
+        'transform',
+        `translate(${point.x.toFixed(2)} ${point.y.toFixed(2)}) scale(${(lastFacing * charScaleX).toFixed(2)} 1)`
+      );
+
+      legBack?.setAttribute('transform', `rotate(${stride.toFixed(1)} -9 -35)`);
+      legFront?.setAttribute('transform', `rotate(${(-stride).toFixed(1)} 8 -35)`);
+      armBack?.setAttribute('transform', `rotate(${(-stride * 0.7).toFixed(1)} -13 -69)`);
+      armFront?.setAttribute('transform', `rotate(${(stride * 0.7).toFixed(1)} 12 -68)`);
+
+      // Milestones sit exactly on the route, not at approximate hard-coded positions.
+      [0.22, 0.58, 0.9].forEach((fraction, index) => {
+        const markerPoint = path.getPointAtLength(pathLength * fraction);
+        pins[index]?.setAttribute('transform', `translate(${markerPoint.x.toFixed(2)} ${markerPoint.y.toFixed(2)})`);
+      });
+
+      updateSceneStates(progress);
+      framePending = false;
+    });
+  };
+
+  applyArtLayout();
+  updateProcessStory();
+
+  window.addEventListener('scroll', updateProcessStory, { passive: true });
+  window.addEventListener('resize', () => {
+    applyArtLayout();
+    updateProcessStory();
+  }, { passive: true });
+
+  mobileLayout.addEventListener?.('change', () => {
+    applyArtLayout();
+    updateProcessStory();
+  });
+
+  reducedMotion.addEventListener?.('change', updateProcessStory);
+
+  if ('ResizeObserver' in window) {
+    const mapObserver = new ResizeObserver(updateProcessStory);
+    mapObserver.observe(map);
+  }
+
+  window.addEventListener('load', updateProcessStory, { once: true });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeProcessStory, { once: true });
+} else {
+  initializeProcessStory();
+}
